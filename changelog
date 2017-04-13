@@ -1,4 +1,4 @@
 13/04/2017 20:22 Julien BOURGEOIS : _Création du fichier changelog ( cette phrase fait office de modèle )
-                                    _Listez les différentes modifications.
+                                    _Ajout des fichier jouer.c, jouer.h, case.c, case.h, plateau.c, plateau.h, makefile.
                                     
                                     
