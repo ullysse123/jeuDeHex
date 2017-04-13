@@ -1,10 +1,20 @@
 #include "plateau.h"
 #include "case.h"
 
-Plateau *creer_plateau(int taille) {
+
+struct s_Plateau {
+    int taille;
+    struct Case *nord;
+    struct Case *sud;
+    struct Case *est;
+    struct Case *ouest;
+};
+
+
+Plateau creer_plateau(int taille) {
     printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
     
-    Plateau *plateau = malloc(sizeof(*plateau));
+    Plateau *plateau = malloc(sizeof(struct s_Plateau));
     
     plateau->taille = 4;
     
@@ -34,7 +44,7 @@ Plateau *creer_plateau(int taille) {
     plateau->ouest->lien[2]  = plateau->sud;   
     
     /* on construit les autres case du plateau en les ajoutants directement au plateau */
-    Case *nouvelle_case;
+    Case nouvelle_case;
 
     int ligne, colonne;
     for(ligne = 0; ligne < taille; ligne++) {
@@ -56,9 +66,9 @@ Plateau *creer_plateau(int taille) {
     return plateau;
 }
 
-void affichage_plateau(Plateau *plateau) {
-    Case *case_courrante_colonne = plateau->nord;
-    Case *case_courrante_ligne = plateau->nord;
+void affichage_plateau(Plateau plateau) {
+    Case case_courrante_colonne = plateau->nord;
+    Case case_courrante_ligne = plateau->nord;
     int nombre_espace = 1;
     while (case_courrante_ligne != NULL) {
         while (case_courrante_colonne != NULL) {

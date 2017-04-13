@@ -1,9 +1,29 @@
 #include "case.h"
 
-Case *creer_case(int ligne, int colonne) {
+
+
+struct s_Position {
+    int ligne;
+    int colonne;
+};
+
+enum e_Couleur {
+    ROUGE = 1, 
+    NOIR  = 2, 
+    VIDE  = 0
+};
+
+struct s_Case {
+    Position pos;
+    Couleur valeur;
+    struct Case *lien[6];
+};
+
+
+Case creer_case(int ligne, int colonne) {
     printf("[creer_case] Creation de la case [%d,%d].\n", ligne, colonne); // Aide pour le dev
     
-    Case *nouvelle_case = malloc(sizeof(*nouvelle_case));
+    Case nouvelle_case = malloc(sizeof(struct s_Case));
     
     nouvelle_case->pos.ligne = ligne;
     nouvelle_case->pos.colonne = colonne;
@@ -13,8 +33,8 @@ Case *creer_case(int ligne, int colonne) {
     return nouvelle_case;
 }
 
-Case *obtenir_case(Plateau *plateau, int ligne, int colonne) {
-    Case *case_chercher = plateau->nord;
+Case obtenir_case(Plateau plateau, int ligne, int colonne) {
+    Case case_chercher = plateau->nord;
 
     /* on parcours le plateau jusqu'a etre a la bonne ligne */
     while((case_chercher->pos.ligne != ligne) && (ligne != plateau->taille-1)) {
@@ -28,7 +48,7 @@ Case *obtenir_case(Plateau *plateau, int ligne, int colonne) {
     return case_chercher;
 }
 
-void construction_lien_case(Plateau *plateau, Case *x) {
+void construction_lien_case(Plateau plateau, Case x) {
             if (x->pos.ligne == 0) {
                 x->lien[0] = NULL;
                 x->lien[1] = NULL;
@@ -48,7 +68,20 @@ void construction_lien_case(Plateau *plateau, Case *x) {
 }
 
 
-// Case modifierCase(Case *caseModifier, Couleur valeur);
-// Couleur couleurCase(Case *x);
-// Position obtenirCoordonnee(Case *x);
-// void supprimerCase(Case *x);
+Case modifierCase(Case caseModifier, Couleur valeur) {
+    //On modifie la couleur de la case.
+    caseModifier->valeur=valeur;
+    return modifierCase;
+}
+
+Couleur couleurCase(Case x) {
+    return x->valeur;
+}
+
+Position obtenirCoordonnee(Case x) {
+    return x->pos;
+}
+
+void supprimerCase(Case x){
+    free(x);
+}
