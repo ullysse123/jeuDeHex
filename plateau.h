@@ -4,22 +4,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "case.h"
+struct Case;
 
 typedef struct Plateau {
-    int nb_niveau;
-    struct Case *Nord;
-    struct Case *Sud;
-    struct Case *Est;
-    struct Case *Ouest;
+    int taille;
+    struct Case *nord;
+    struct Case *sud;
+    struct Case *est;
+    struct Case *ouest;
 } Plateau;
 
-Plateau *creerPlateau(int niveau);
-Couleur estFini(Plateau *plateau);
-int taillePlateau(Plateau *plateau);
-int plusGrandGroupe(Plateau *plateau);
-void afficherPlateau(Plateau *plateau);
-int nombreCaseCouleur(Plateau *plateau);
-void supprimerPlateau(Plateau *plateau);
+Plateau *creer_plateau(int taille);
+void affichage_plateau(Plateau *plateau);
+
+
+// Couleur estFini(Plateau *plateau);
+// int taillePlateau(Plateau *plateau);
+// int plusGrandGroupe(Plateau *plateau);
+// void afficherPlateau(Plateau *plateau);
+// int nombreCaseCouleur(Plateau *plateau);
+// void supprimerPlateau(Plateau *plateau);
 
 #endif
