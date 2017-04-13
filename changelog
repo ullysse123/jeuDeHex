@@ -2,3 +2,7 @@
                                     _Ajout des fichier jouer.c, jouer.h, case.c, case.h, plateau.c, plateau.h, makefile.
                                     
                                     
+13/04/2017 22:38 Julien BOURGEOIS : _Ajout des commentaires dans les fichiers jouer.h, case.h, plateau.h
+                                    _Fonction de case.h faites : modifierCase, couleurCase, obtenirCoordonnée. Debut de supprimerCase mais non fini
+                                    
+                                    
