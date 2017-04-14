@@ -83,5 +83,6 @@ Position obtenirCoordonnee(Case x) {
 }
 
 void supprimerCase(Case x){
+    //Il faut dans un premier temps enlever tous lesl iens avant de supprimer la case.
     free(x);
 }
