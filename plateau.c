@@ -12,53 +12,28 @@ struct s_Plateau {
 
 
 Plateau creer_plateau(int taille) {
-    printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
-    
-    Plateau *plateau = malloc(sizeof(struct s_Plateau));
-    
+     printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
+    Plateau plateau = malloc(sizeof(struct s_Plateau));
     plateau->taille = 4;
-    
-    /* construction des sommets */
-    plateau->nord  = creer_case(0,0);
-    plateau->sud   = creer_case(taille-1,taille-1);
-    plateau->est   = creer_case(0, taille-1);
-    plateau->ouest = creer_case(taille-1, 0);
+
+    /* construction du sommet nord */
+    plateau->nord = creer_case(0,0);
 
     /* on relie les sommets entre eux pour simplifier la construction du plateau */
     construction_lien_case(plateau, plateau->nord);
-    construction_lien_case(plateau, plateau->est);
-    construction_lien_case(plateau, plateau->sud);
-    construction_lien_case(plateau, plateau->ouest);
-    
-    
-    plateau->nord->lien[2] = plateau->est;
-    plateau->nord->lien[3] = plateau->ouest;
-    
-    plateau->est->lien[5]  = plateau->nord;
-    plateau->est->lien[3]  = plateau->sud;
-    
-    plateau->sud->lien[0]  = plateau->est;
-    plateau->sud->lien[5]  = plateau->ouest;
-    
-    plateau->ouest->lien[0]  = plateau->nord;
-    plateau->ouest->lien[2]  = plateau->sud;   
-    
+
     /* on construit les autres case du plateau en les ajoutants directement au plateau */
     Case nouvelle_case;
 
     int ligne, colonne;
     for(ligne = 0; ligne < taille; ligne++) {
         for(colonne = 0; colonne < taille; colonne++) {
-            /* on saute les sommets, ils sont deja creer*/
-            if ((ligne == 0 && colonne == 0) ||
-                (ligne == 0 && colonne == taille-1) ||
-                (ligne == taille-1 && colonne == 0) ||
-                (ligne == taille-1 && colonne == taille-1)) {
+            /* on saute le sommet nord, il est deja creer */
+            if ((ligne == 0 && colonne == 0))
                 continue;
-            }
-            /* on creer la case et on edite les liens */
-            nouvelle_case = creer_case(ligne, colonne);
-            construction_lien_case(plateau, nouvelle_case);
+                /* on creer la case et on edite les liens */
+                nouvelle_case = creer_case(ligne, colonne);
+                construction_lien_case(plateau, nouvelle_case);
         }
         printf("\n");
     }
@@ -71,6 +46,7 @@ void affichage_plateau(Plateau plateau) {
     Case case_courrante_ligne = plateau->nord;
     int nombre_espace = 1;
     while (case_courrante_ligne != NULL) {
+        
         while (case_courrante_colonne != NULL) {
             printf("[%d, %d]", case_courrante_colonne->pos.ligne, case_courrante_colonne->pos.colonne);
             case_courrante_colonne = case_courrante_colonne->lien[2];

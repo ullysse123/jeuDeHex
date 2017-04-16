@@ -10,7 +10,7 @@ Plateau nouvellePartie ();
 
 int main(void) {
     
-    Plateau *plateau = creer_plateau(4);
+    Plateau plateau = creer_plateau(4);
     
     affichage_plateau(plateau);
     
