@@ -41,6 +41,40 @@ Plateau creer_plateau(int taille) {
     return plateau;
 }
 
+void construction_lien_case(Plateau plateau, Case x) {
+    int ligne = ;
+    int colonne = x->pos.colonne;
+    int taille = plateau->taille-1;
+
+    printf("    [construction_lien_case] Creations des liens.\n"); // Aide pour le dev
+
+    if (colonne == 0) {
+        x->lien[4] = NULL;
+        x->lien[5] = NULL;
+    } else if (colonne == taille) {
+        x->lien[1] = NULL;
+        x->lien[2] = NULL;
+        x->lien[5] = obtenir_case(plateau, ligne, colonne-1);
+        x->lien[5]->lien[2] = x;
+    } else {
+        x->lien[5] = obtenir_case(plateau, ligne, colonne-1);
+        x->lien[5]->lien[2] = x;
+    }
+
+    if (ligne == 0) {
+        x->lien[0] = NULL;
+        x->lien[1] = NULL;
+    } else if (ligne == taille) {
+        x->lien[3] = NULL;
+        x->lien[4] = NULL;
+        x->lien[0] = obtenir_case(plateau, ligne-1, colonne);
+        x->lien[0]->lien[3] = x;
+    } else {
+        x->lien[0] = obtenir_case(plateau, ligne-1, colonne);
+        x->lien[0]->lien[3] = x;
+    }
+}
+
 void affichage_plateau(Plateau plateau) {
     Case case_courrante_colonne = plateau->nord;
     Case case_courrante_ligne = plateau->nord;

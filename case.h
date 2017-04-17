@@ -24,14 +24,6 @@ typedef struct s_Case *Case;
 Case creer_case(int ligne, int colonne);
 
 /*
- * Fonction construction lien case :
- *  _Objectif créer les différents lien entre les cases
- *  _Prend en entrée un Plateau et une case
- *  _Ne renvoie rien.
- */
-void construction_lien_case(Plateau plateau, Case x);
-
-/*
  * Fonction modifier case :
  *  _Objectif modifier la couleur de la case
  *  _Prend en entrée la case a modifier et la couleur a lui attribuer

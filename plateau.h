@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "case.h"
+
 
 //Structure de notre plateau, contient la taille, les cases des differents angles.
 typedef struct s_Plateau *Plateau;
@@ -14,6 +16,14 @@ typedef struct s_Plateau *Plateau;
  *  _Renvoie un plateau créer
  */
 Plateau creer_plateau(int taille);
+
+/*
+ * Fonction construction lien case :
+ *  _Objectif créer les différents lien entre les cases
+ *  _Prend en entrée un Plateau et une case
+ *  _Ne renvoie rien.
+ */
+void construction_lien_case(Plateau plateau, Case x);
 
 /*
  * Fonction affichage plateau
