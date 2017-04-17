@@ -16,7 +16,7 @@ enum e_Couleur {
 struct s_Case {
     Position pos;
     Couleur valeur;
-    struct Case *lien[6];
+    struct Case lien[6];
 };
 
 
