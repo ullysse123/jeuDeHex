@@ -2,15 +2,6 @@
 #include "case.h"
 
 
-struct s_Plateau {
-    int taille;
-    Case nord;
-    Case sud;
-    Case est;
-    Case ouest;
-};
-
-
 Plateau creer_plateau(int taille) {
      printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
     Plateau plateau = malloc(sizeof(struct s_Plateau));
@@ -42,7 +33,7 @@ Plateau creer_plateau(int taille) {
 }
 
 void construction_lien_case(Plateau plateau, Case x) {
-    int ligne = ;
+    int ligne = x->pos.ligne;
     int colonne = x->pos.colonne;
     int taille = plateau->taille-1;
 

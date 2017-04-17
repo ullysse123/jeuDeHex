@@ -2,24 +2,6 @@
 #include "plateau.h"
 
 
-struct s_Position {
-    int ligne;
-    int colonne;
-};
-
-enum e_Couleur {
-    ROUGE = 1, 
-    NOIR  = 2, 
-    VIDE  = 0
-};
-
-struct s_Case {
-    Position pos;
-    Couleur valeur;
-    struct Case lien[6];
-};
-
-
 Case creer_case(int ligne, int colonne) {
     printf("[creer_case] Creation de la case [%d,%d].\n", ligne, colonne); // Aide pour le dev
     

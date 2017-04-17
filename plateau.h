@@ -7,7 +7,13 @@
 
 
 //Structure de notre plateau, contient la taille, les cases des differents angles.
-typedef struct s_Plateau *Plateau;
+typedef struct s_Plateau {
+    int taille;
+    Case nord;
+    Case sud;
+    Case est;
+    Case ouest;
+}*Plateau;
 
 /*
  * Fonction créer plateau

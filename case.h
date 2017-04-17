@@ -7,13 +7,24 @@
 #include "plateau.h"
 
 //Structure permettant de stocket des coordonnée ligne et colonne
-typedef struct s_Position Position;
+typedef struct s_Position{
+    int ligne;
+    int colonne;
+} Position;
 
 //Enumeration des couleurs du jeu : ROUGE // NOIR // VIDE
-typedef enum e_Couleur Couleur;
+typedef enum e_Couleur{
+    ROUGE = 1, 
+    NOIR  = 2, 
+    VIDE  = 0
+} Couleur;
 
 //Structure de notre case contenant Position, Couleur et liens
-typedef struct s_Case *Case;
+typedef struct s_Case{
+    Position pos;
+    Couleur valeur;
+    Case lien[6];
+}*Case;
 
 /*
  * Fonction créer case :
