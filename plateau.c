@@ -66,6 +66,21 @@ void construction_lien_case(Plateau plateau, Case x) {
     }
 }
 
+Case obtenir_case(Plateau plateau, int ligne, int colonne) {
+    Case case_chercher = plateau->nord;
+
+    /* on parcours le plateau jusqu'a etre a la bonne ligne */
+    while((case_chercher->pos.ligne != ligne) && (ligne != plateau->taille-1)) {
+        case_chercher = case_chercher->lien[3];
+    }
+    /* on parcours le plateau jusqu'a etre a la bonne colonne */
+    while((case_chercher->pos.colonne != colonne) && (colonne != plateau->taille-1)) {
+        case_chercher = case_chercher->lien[2];
+    }
+
+    return case_chercher;
+}
+
 void affichage_plateau(Plateau plateau) {
     Case case_courrante_colonne = plateau->nord;
     Case case_courrante_ligne = plateau->nord;

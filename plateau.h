@@ -9,10 +9,10 @@
 //Structure de notre plateau, contient la taille, les cases des differents angles.
 typedef struct s_Plateau {
     int taille;
-    Case nord;
-    Case sud;
-    Case est;
-    Case ouest;
+    struct s_Case* nord;
+    struct s_Case* sud;
+    struct s_Case* est;
+    struct s_Case* ouest;
 }*Plateau;
 
 /*
@@ -30,6 +30,8 @@ Plateau creer_plateau(int taille);
  *  _Ne renvoie rien.
  */
 void construction_lien_case(Plateau plateau, Case x);
+
+Case obtenir_case(Plateau plateau, int ligne, int colonne);
 
 /*
  * Fonction affichage plateau

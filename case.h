@@ -23,7 +23,7 @@ typedef enum e_Couleur{
 typedef struct s_Case{
     Position pos;
     Couleur valeur;
-    Case lien[6];
+    struct s_Case* lien[6];
 }*Case;
 
 /*
