@@ -4,10 +4,10 @@
 
 struct s_Plateau {
     int taille;
-    struct Case *nord;
-    struct Case *sud;
-    struct Case *est;
-    struct Case *ouest;
+    Case nord;
+    Case sud;
+    Case est;
+    Case ouest;
 };
 
 
