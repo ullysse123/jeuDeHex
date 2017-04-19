@@ -18,6 +18,6 @@ jouer.o: jouer.c plateau.h case.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	del *.o
-	del *.gch
-	del $(EXEC).exe
+	rm *.o
+	rm *.gch
+	rm $(EXEC).exe
