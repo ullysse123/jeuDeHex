@@ -18,7 +18,7 @@ Case creer_case(int ligne, int colonne) {
 Case modifierCase(Case caseModifier, Couleur valeur) {
     //On modifie la couleur de la case.
     caseModifier->valeur=valeur;
-    return modifierCase;
+    return caseModifier;
 }
 
 Couleur couleurCase(Case x) {

@@ -1,5 +1,6 @@
 #include "plateau.h"
 #include "case.h"
+#include <stdbool.h>
 
 
 Plateau creer_plateau(int taille) {

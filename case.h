@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "plateau.h"
 
 //Structure permettant de stocket des coordonnée ligne et colonne
 typedef struct s_Position{
