@@ -1,4 +1,6 @@
 #include "plateau.h"
+#include <string.h>
+#include <stdio.h>
 
 int quiCommence();
 void jouer();
@@ -9,23 +11,21 @@ Plateau annuler (Plateau plateau, FILE* fichier);
 Plateau nouvellePartie ();
 
 bool abandonner(Plateau plateau) {
-  char tmp, save, abandon;
+  int save, abandon;
   do {
-    printf("confirmer abandon (O-N) ? :\n");
-    scanf("%c", &tmp);
-    abandon = tmp;
-  } while ((abandon != 'O' && abandon != 'o') && (abandon !='N' && abandon != 'n'));
-  tmp = ' ';
-  if (abandon == 'O' || abandon == 'o') {
+    printf("confirmer abandon (0 = non - 1 = oui) ? :");
+      scanf("%d", &abandon);
+  } while (abandon != 0 && abandon !=1);
+  if (abandon == 1) {
     do {
-      printf("sauvegarder plateau (O-N) ? :\n");
-      scanf("%c", &save);
-    } while ((save != 'O' && save != 'o') && (save != 'N' && save != 'n'));
-    if (save == 'O' || save == 'o') {
+      printf("sauvegarder plateau (0 = non - 1 = oui) ? :");
+      scanf("%d", &save);
+    } while (save != 0 && save != 1);
+    if (save == 1) {
       sauvegarde(plateau);
     }
   }
-  return (save == 'O' || save == 'o');
+  return (save == 1);
 }
 
 void sauvegarde(Plateau plateau) {
