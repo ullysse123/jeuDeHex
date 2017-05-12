@@ -3,12 +3,12 @@
 nomFic=resultatValgrind
 cheminAcces=../resultatDebug/
 
-install=`dpkg -l | grep valgrind`
+install=`dpkg -l | grep valgrind` >/dev/null
 rep="j"
 
 if ( "$install" != "" )
 then
-	echo "Souhaitez vous installer Valgrind pour pouvoir continuer ? y/n"
+	echo "[Make Valgrind] Souhaitez vous installer Valgrind pour pouvoir continuer ? y/n"
 
 	while ( $rep != "y" | $rep != "n" )
 	do
@@ -19,7 +19,7 @@ then
 	then
 		sudo apt-get install valgrind
 	else
-		echo "Vous ne souhaitez continuer, fin du programme"
+		echo "[Make Valgrind] Vous ne souhaitez continuer, fin du programme"
 		exit 1
 	fi
 fi

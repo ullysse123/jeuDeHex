@@ -22,6 +22,7 @@ clean:
 	rm $(EXEC)
 
 valgrind:
+	make
 	./scriptMakeFile/makeValgrind.sh $(EXEC)
 
 
