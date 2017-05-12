@@ -14,15 +14,15 @@ bool abandonner(Plateau plateau) {
     printf("confirmer abandon (O-N) ? :");
     scanf("%c", &tmp);
     abandon = tmp;
-  } while (abandon != 'O' && abandon !='N');
+  } while ((abandon != 'O' || abandon != 'o') && (abandon !='N' || abandon != 'n');
   tmp = ' ';
   save = ' ';
-  if (abandon == 'O') {
+  if (abandon == 'O' || abandon == 'o') {
     do {
       printf("sauvegarder plateau (O-N) ? :");
       scanf("%c", &save);
-    } while (save != 'O' && save != 'N');
-    if (save == 'O') {
+    } while ((save != 'O' || save != 'o') && (save != 'N' || save != 'n'));
+    if (save == 'O' || save == 'o') {
       sauvegarde(plateau);
     }
   }
