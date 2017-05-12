@@ -1,0 +1,30 @@
+[creer_plateau] Creation du plateau.
+[creer_case] Creation de la case [0,0].
+    [creer_case] la case [0,0] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+[creer_case] Creation de la case [0,1].
+    [creer_case] la case [0,1] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+[creer_case] Creation de la case [0,2].
+    [creer_case] la case [0,2] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+[creer_case] Creation de la case [0,3].
+    [creer_case] la case [0,3] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+
+[creer_case] Creation de la case [1,0].
+    [creer_case] la case [1,0] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+[creer_case] Creation de la case [1,1].
+    [creer_case] la case [1,1] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+[creer_case] Creation de la case [1,2].
+    [creer_case] la case [1,2] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+[creer_case] Creation de la case [1,3].
+    [creer_case] la case [1,3] a bien ete creee.
+    [construction_lien_case] Creations des liens.
+
+[creer_case] Creation de la case [2,0].
+    [creer_case] la case [2,0] a bien ete creee.
+    [construction_lien_case] Creations des liens.

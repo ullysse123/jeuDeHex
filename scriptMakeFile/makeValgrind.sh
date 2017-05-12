@@ -1,16 +1,18 @@
  #! /bin/sh
 
-nomFic=resultatValgrind
-cheminAcces=../resultatDebug/
-
-install=`dpkg -l | grep valgrind` >/dev/null
+nomFic=codeExecuteeValgrind
+cheminAcces=./resultatDebug/
+vide="Status: install ok installed"
+install=`dpkg -s valgrind | grep Status` >/dev/null
 rep="j"
 
-if ( "$install" != "" )
+pwd
+
+if [ "$install" != "$vide" ]
 then
 	echo "[Make Valgrind] Souhaitez vous installer Valgrind pour pouvoir continuer ? y/n"
 
-	while ( $rep != "y" | $rep != "n" )
+	while [ $rep != "y" || $rep != "n" ]
 	do
 		read rep
 	done
@@ -24,13 +26,14 @@ then
 	fi
 fi
 
-if ( -f "$cheminAcces$nomFic" )
+if [ -f "$cheminAcces$nomFic" ]
 then
 	rm $cheminAcces$nomFic
 fi
 
-valgrind ../$1 >"$cheminAcces$nomFic"
+valgrind ./"$1" >"$nomFic" 
+mv "$nomFic" "$cheminAcces$nomFic"
 
-echo "[Make Valgrind] Sauvegarde des resultats du valgrind dans resultatDebug/resultatValgrind"
+echo "[Make Valgrind] Sauvegarde du code executé par valgrind dans resultatDebug/codeExecuteeValgrind"
 
 exit 0
