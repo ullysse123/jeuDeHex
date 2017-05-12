@@ -31,6 +31,8 @@ Plateau creer_plateau(int taille) {
         }
         printf("\n");
     }
+    printf("\n");
+    printf("\n");
 
     return plateau;
 }
@@ -84,6 +86,19 @@ Case obtenir_case(Plateau plateau, int ligne, int colonne) {
     return case_chercher;
 }
 
+char couleurToChar(Case c){
+  switch ((int)c->valeur) {
+    case 1 :
+      return 'o';
+      break;
+    case 2:
+      return '*';
+      break;
+    default:
+      return '.';
+  }
+}
+
 void affichage_plateau(Plateau plateau) {
     Case case_courrante_colonne = plateau->nord;
     Case case_courrante_ligne = plateau->nord;
@@ -91,12 +106,13 @@ void affichage_plateau(Plateau plateau) {
     while (case_courrante_ligne != NULL) {
         
         while (case_courrante_colonne != NULL) {
-            printf("[%d, %d]", case_courrante_colonne->pos.ligne, case_courrante_colonne->pos.colonne);
+            //printf("[%d, %d]", case_courrante_colonne->pos.ligne, case_courrante_colonne->pos.colonne);
+	    printf("[%c] ", couleurToChar(case_courrante_colonne));
             case_courrante_colonne = case_courrante_colonne->lien[2];
         }
         printf("\n");
         int i;
-        for(i=0; i<nombre_espace*3; i++)
+        for(i=0; i<(nombre_espace*2); i++)
             printf(" ");
         
         case_courrante_ligne = case_courrante_ligne->lien[3];
@@ -106,11 +122,31 @@ void affichage_plateau(Plateau plateau) {
     }
 }
 
+int taillePlateau(Plateau plateau) {
+  return (plateau->taille);
+}
+
+
+int nombreCaseCouleur(Plateau plateau){
+  Case case_courrante_ligne = plateau->nord;
+  Case case_courrante_colonne = plateau->nord;
+  int sum = 0;
+  while (case_courrante_ligne != NULL) {
+        
+        while (case_courrante_colonne != NULL) {
+            if ((int)case_courrante_colonne->valeur != 0){
+	      sum ++;
+	    }
+            case_courrante_colonne = case_courrante_colonne->lien[2];
+        }        
+        case_courrante_ligne = case_courrante_ligne->lien[3];
+        case_courrante_colonne = case_courrante_ligne;
+    }
+    return sum;
+}
 
 
 // Couleur estFini(Plateau *plateau);
-// int taillePlateau(Plateau *plateau);
 // int plusGrandGroupe(Plateau *plateau);
 // void afficherPlateau(Plateau *plateau);
-// int nombreCaseCouleur(Plateau *plateau);
 // void supprimerPlateau(Plateau *plateau);

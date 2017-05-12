@@ -2,20 +2,49 @@
 
 int quiCommence();
 void jouer();
-void sauvegarde(Plateau plateau);
+void sauvegarde(Plateau plateau); // formatage plateau fini
 Plateau charger (FILE *fichier);
 Plateau annuler (Plateau plateau, FILE* fichier);
-bool abandonner (Plateau plateau);
+// bool abandonner (Plateau plateau);
 Plateau nouvellePartie ();
 
+bool abandonner(Plateau plateau) {
+  char tmp, save, abandon;
+  do {
+    printf("confirmer abandon (O-N) ? :");
+    scanf("%c", &tmp);
+    abandon = tmp;
+  } while (abandon != 'O' && abandon !='N');
+  tmp = ' ';
+  save = ' ';
+  if (abandon == 'O') {
+    do {
+      printf("sauvegarder plateau (O-N) ? :");
+      scanf("%c", &save);
+    } while (save != 'O' && save != 'N');
+    if (save == 'O') {
+      sauvegarde(plateau);
+    }
+  }
+  return (save == 'O');
+}
 
-void affichage_plateau_sauvegarde(Plateau plateau) {
+void sauvegarde(Plateau plateau) {
     Case case_courrante_colonne = plateau->nord;
     Case case_courrante_ligne = plateau->nord;
+    printf("/board\n");
     while (case_courrante_ligne != NULL) {
         
         while (case_courrante_colonne != NULL) {
-            printf("%c ", case_courrante_colonne->valeur);
+	    if ((int)case_courrante_colonne->valeur == 0) {
+	    
+	      printf(". ");
+	    } else if ((int)case_courrante_colonne->valeur == 1) {
+	      
+	      printf("o ");
+	    } else {
+	      printf("* ");
+	    }
             case_courrante_colonne = case_courrante_colonne->lien[2];
         }
         printf("\n");        
@@ -23,6 +52,7 @@ void affichage_plateau_sauvegarde(Plateau plateau) {
         case_courrante_colonne = case_courrante_ligne;
         
     }
+    printf("/endboard\n");
 }
 
 int main(void) {
@@ -30,7 +60,14 @@ int main(void) {
     Plateau plateau = creer_plateau(4);
     
     affichage_plateau(plateau);
+    printf("\n");
+    modifierCase(plateau->nord, 1);
     
-    affichage_plateau_sauvegarde(plateau);
+    affichage_plateau(plateau);
+    printf("\n");
+    printf("%d\n", nombreCaseCouleur(plateau));
+    sauvegarde(plateau);
+    
+    abandonner(plateau);
     return 0;
 }
