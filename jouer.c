@@ -25,7 +25,7 @@ bool abandonner(Plateau plateau) {
       sauvegarde(plateau);
     }
   }
-  return (save == 1);
+  return (abandon == 1);
 }
 
 void sauvegarde(Plateau plateau) {
