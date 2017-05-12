@@ -11,22 +11,21 @@ Plateau nouvellePartie ();
 bool abandonner(Plateau plateau) {
   char tmp, save, abandon;
   do {
-    printf("confirmer abandon (O-N) ? :");
+    printf("confirmer abandon (O-N) ? :\n");
     scanf("%c", &tmp);
     abandon = tmp;
-  } while ((abandon != 'O' || abandon != 'o') && (abandon !='N' || abandon != 'n');
+  } while ((abandon != 'O' && abandon != 'o') && (abandon !='N' && abandon != 'n'));
   tmp = ' ';
-  save = ' ';
   if (abandon == 'O' || abandon == 'o') {
     do {
-      printf("sauvegarder plateau (O-N) ? :");
+      printf("sauvegarder plateau (O-N) ? :\n");
       scanf("%c", &save);
-    } while ((save != 'O' || save != 'o') && (save != 'N' || save != 'n'));
+    } while ((save != 'O' && save != 'o') && (save != 'N' && save != 'n'));
     if (save == 'O' || save == 'o') {
       sauvegarde(plateau);
     }
   }
-  return (save == 'O');
+  return (save == 'O' || save == 'o');
 }
 
 void sauvegarde(Plateau plateau) {
