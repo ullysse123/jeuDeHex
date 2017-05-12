@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdool.h>
-#include "sauvegarde.h"
 
 /*
  * Fonction qui commence :
@@ -62,5 +61,12 @@ bool abandonner (Plateau plateau);
  */
 Plateau nouvellePartie ();
 
+/*
+ * Fonction affichage_plateau_sauvegarde
+ *  _Objectif formate l'affichage pour la sauvegarde
+ *  _Prend un ptateau en entrée
+ *  _Renvoie l'affichage du tableau
+ */
+void affichage_plateau_sauvegarde(Plateau plateau);
 
 #endif
