@@ -41,10 +41,10 @@ void construction_lien_case(Plateau plateau, Case x) {
     int taille = plateau->taille-1;
 
     printf("    [construction_lien_case] Creations des liens.\n"); // Aide pour le dev
-
+    
     if (colonne == 0) {
         x->lien[4] = NULL;
-        x->lien[5] = NULL;
+        x->lien[5] = NULL;        
     } else if (colonne == taille) {
         x->lien[1] = NULL;
         x->lien[2] = NULL;
@@ -54,7 +54,7 @@ void construction_lien_case(Plateau plateau, Case x) {
         x->lien[5] = obtenir_case(plateau, ligne, colonne-1);
         x->lien[5]->lien[2] = x;
     }
-
+    
     if (ligne == 0) {
         x->lien[0] = NULL;
         x->lien[1] = NULL;
@@ -73,11 +73,11 @@ Case obtenir_case(Plateau plateau, int ligne, int colonne) {
     Case case_chercher = plateau->nord;
 
     /* on parcours le plateau jusqu'a etre a la bonne ligne */
-    while((case_chercher->pos.ligne != ligne) && (ligne != plateau->taille-1)) {
+    while((case_chercher->pos.ligne != ligne)) {
         case_chercher = case_chercher->lien[3];
     }
     /* on parcours le plateau jusqu'a etre a la bonne colonne */
-    while((case_chercher->pos.colonne != colonne) && (colonne != plateau->taille-1)) {
+    while((case_chercher->pos.colonne != colonne)) {
         case_chercher = case_chercher->lien[2];
     }
 
