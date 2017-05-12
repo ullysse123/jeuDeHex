@@ -1,4 +1,5 @@
 #include "plateau.h"
+#include "sauvegarde.h"
 
 int quiCommence();
 void jouer();
@@ -14,5 +15,6 @@ int main(void) {
     
     affichage_plateau(plateau);
     
+    affichage_plateau_sauvegarde(plateau);
     return 0;
 }
