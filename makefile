@@ -23,8 +23,7 @@ clean:
 
 valgrind:
 	make
-	chmod 777 scriptMakeFile/makeValgrind.sh
-	./scriptMakeFile/makeValgrind.sh $(EXEC) 
+	./scriptMakeFile/makeValgrind.sh $(EXEC)
 
 
 
