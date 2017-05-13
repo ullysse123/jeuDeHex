@@ -82,4 +82,12 @@ int nombreCaseCouleur(Plateau plateau);
  */
 void supprimerPlateau(Plateau plateau);
 
+/*
+ * Fonction d'affichage de la couleur
+ *  _Objectif change la couleur par un caractere affin de l'afficher
+ *  _Prend en entrée une case
+ *  _renvoie un caractere
+ */
+char couleurToChar(Case c);
+
 #endif

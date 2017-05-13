@@ -6,7 +6,7 @@
 
 
 Plateau creer_plateau(int taille) {
-     printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
+    printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
     Plateau plateau = malloc(sizeof(struct s_Plateau));
     plateau->taille = 4;
 
@@ -148,5 +148,5 @@ int nombreCaseCouleur(Plateau plateau){
 
 // Couleur estFini(Plateau *plateau);
 // int plusGrandGroupe(Plateau *plateau);
-// void afficherPlateau(Plateau *plateau);
+
 // void supprimerPlateau(Plateau *plateau);
