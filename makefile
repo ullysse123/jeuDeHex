@@ -25,5 +25,9 @@ valgrind:
 	make
 	./scriptMakeFile/makeValgrind.sh $(EXEC)
 
+install:
+	./scriptMakeFile/makeInstall.sh
+	make
+
 
 
