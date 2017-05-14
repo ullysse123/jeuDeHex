@@ -79,6 +79,7 @@ void construction_lien_case(Plateau plateau, Case x){
                 x->lien[1]=NULL;
                 x->lien[2]=NULL;
                 x->lien[5]=obtenir_case(plateau,ligne,colonne-1);
+                x->lien[5]->lien[2]=x;
             }else{
                 if(ligne == taille){
                     //Cas 5 : Angle en bas a droite
