@@ -1,0 +1,8 @@
+Modèle Logique de Données
+
+A noté : Les clefs primaire sont représentées par le symbole $ dans ce MLD
+
+JOUEUR($Pseudo,Mail,Annee)
+COUP($IdCoup,Couleur,X,Y,Numéro,)
+DATE($IdDate,Heure,Jour,Mois,Annee)
+JOUER($(#Pseudo,#IdDate,#IdCoup),Status)
