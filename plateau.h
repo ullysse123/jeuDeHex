@@ -80,7 +80,7 @@ int nombreCaseCouleur(Plateau plateau);
  *  _Prend en entrée un plateau
  *  _ne renvoie rien
  */
-void supprimerPlateau(Plateau *plateau);
+void supprimerPlateau(Plateau plateau);
 
 /*
  * Fonction d'affichage de la couleur

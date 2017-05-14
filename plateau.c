@@ -246,11 +246,11 @@ int nombreCaseCouleur(Plateau plateau){
 // Couleur estFini(Plateau plateau);
 // int plusGrandGroupe(Plateau plateau);
 
-void supprimerPlateau(Plateau *plateau){
+void supprimerPlateau(Plateau plateau){
     
-    Case case_courrante = (*plateau)->nord;
+    Case case_courrante = plateau->nord;
     Case case_suivante = case_courrante->lien[2];
-    int taille = (*plateau)->taille;
+    int taille = plateau->taille;
     
     //Tant que case_suivante != NULL on continue
     while (case_suivante != NULL){
