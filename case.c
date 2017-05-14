@@ -30,9 +30,9 @@ Position obtenirCoordonnee(Case x) {
 }
 
 void supprimerCase(Case x){
-    //Il faut dans un premier temps enlever tous lesl iens avant de supprimer la case.
-//     Case case_courante;
-//     case_courante->pos = obtenir_case(plateau, plateau->taille-1, plateau->taille-1);
-//     
+    //Pour supprimer une case, je redirige tous les liens vers la case elle meme, puis je la supprime.
+    for (int i=0;i<6;i++){
+        x->lien[i]=x;
+    }
     free(x);
 }
