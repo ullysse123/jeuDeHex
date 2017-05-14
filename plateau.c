@@ -275,6 +275,7 @@ void supprimerPlateau(Plateau plateau){
         }
         //Preparation au parcours vers la gauche
         if(case_suivante != NULL){
+            supprimerCase(case_courrante);
             case_courrante = case_suivante;
             case_suivante = case_courrante->lien[5];
         }
@@ -298,6 +299,7 @@ void supprimerPlateau(Plateau plateau){
         }
         //Preparation au parcours vers la droite
         if(case_suivante != NULL){
+            supprimerCase(case_courrante);
             case_courrante = case_suivante;
             case_suivante = case_courrante->lien[2];
         }
