@@ -152,39 +152,47 @@ Case obtenir_case(Plateau plateau, int ligne, int colonne) {
 }
 
 char couleurToChar(Case c){
+  // on regarde la valeur de la case
   switch ((int)c->valeur) {
     case 1 :
+      // case blanche
       return 'o';
       break;
     case 2:
+      // case noir
       return '*';
       break;
     default:
+      // case vide
       return '.';
   }
 }
 
 void affichage_plateau(Plateau plateau) {
-    Case case_courrante_colonne = plateau->nord;
-    Case case_courrante_ligne = plateau->nord;
-    int nombre_espace = 1;
-    while (case_courrante_ligne != NULL) {
-        
-        while (case_courrante_colonne != NULL) {
-            //printf("[%d, %d]", case_courrante_colonne->pos.ligne, case_courrante_colonne->pos.colonne);
-	    printf("[%c] ", couleurToChar(case_courrante_colonne));
-            case_courrante_colonne = case_courrante_colonne->lien[2];
-        }
-        printf("\n");
-        int i;
-        for(i=0; i<(nombre_espace*2); i++)
-            printf(" ");
-        
-        case_courrante_ligne = case_courrante_ligne->lien[3];
-        case_courrante_colonne = case_courrante_ligne;
-        
-        nombre_espace++;
+  // 
+  Case case_courrante_colonne = plateau->nord;
+  Case case_courrante_ligne = plateau->nord;
+  int nombre_espace = 1;
+  // parcour du plateau de jeu
+  while (case_courrante_ligne != NULL) {
+      
+    while (case_courrante_colonne != NULL) {
+      //affichage de la couleur de la case
+      printf("[%c] ", couleurToChar(case_courrante_colonne));
+      case_courrante_colonne = case_courrante_colonne->lien[2];
     }
+    // fin de ligne
+    printf("\n");
+    // mise en forme du plateau (pour avoir le décalage
+    int i;
+    for(i=0; i<(nombre_espace*2); i++)
+      printf(" ");
+    
+    case_courrante_ligne = case_courrante_ligne->lien[3];
+    case_courrante_colonne = case_courrante_ligne;
+    
+    nombre_espace++;
+  }
 }
 
 int taillePlateau(Plateau plateau) {
@@ -195,10 +203,13 @@ int taillePlateau(Plateau plateau) {
 int nombreCaseCouleur(Plateau plateau){
   Case case_courrante_ligne = plateau->nord;
   Case case_courrante_colonne = plateau->nord;
+  // variable de comptage des case déjà occupés
   int sum = 0;
+  // parcour du plateau
   while (case_courrante_ligne != NULL) {
         
         while (case_courrante_colonne != NULL) {
+	  // si la case n'est pas vide on ajoute 1 à la somme
             if ((int)case_courrante_colonne->valeur != 0){
 	      sum ++;
 	    }
@@ -207,6 +218,7 @@ int nombreCaseCouleur(Plateau plateau){
         case_courrante_ligne = case_courrante_ligne->lien[3];
         case_courrante_colonne = case_courrante_ligne;
     }
+    // en retourne le résultat
     return sum;
 }
 
