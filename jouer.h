@@ -26,9 +26,9 @@ void jouer();
  * Fonction sauvegarde
  *  _Objectif sauvegarder le plateau dans un fichier
  *  _Prend en entrée le plateau de jeu
- *  _Ne renvoie rien
+ *  _renvoie 1 si erreur , 0 si ok
  */
-void sauvegarde(Plateau plateau);
+int sauvegarde(Plateau plateau);
 
 /*
  * Fonction charger

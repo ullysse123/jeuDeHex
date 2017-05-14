@@ -5,7 +5,7 @@
 
 // int quiCommence();
 void jouer();
-void sauvegarde(Plateau plateau); // formatage plateau fini
+// void sauvegarde(Plateau plateau); // formatage plateau fini
 Plateau charger (FILE *fichier);
 Plateau annuler (Plateau plateau, FILE* fichier);
 // bool abandonner (Plateau plateau); -> maj save ou s
@@ -63,7 +63,8 @@ Plateau nouvellePartie () {
 }
 
 bool abandonner(Plateau plateau) {
-  int save, abandon;
+  int save, abandon, erreur;
+  //erreur = 0;
   do {
     printf("confirmer abandon (0 = non - 1 = oui) ? :");
       scanf("%d", &abandon);
@@ -74,25 +75,26 @@ bool abandonner(Plateau plateau) {
       scanf("%d", &save);
     } while (save != 0 && save != 1);
     if (save == 1) {
-      sauvegarde(plateau);
+      erreur = sauvegarde(*plateau);
     }
 //     supprimerPlateau(plateau);
   }
   return (save == 1);
 }
 
-void sauvegarde_coup_tmp(Case c) {
+int sauvegarde_coup_tmp(Case c) {
   FILE * id_save_coup = NULL;
   id_save_coup = fopen("save/saveCoupTmp.txt", "at");
-  if (id_save_coup == NULL) perror("save/saveCoupTmp.txt");
+  if (id_save_coup == NULL) return 1;
   fprintf(id_save_coup, "/play %c %d %d\n", couleurToChar(c), c->pos.ligne, c->pos.colonne);
   fclose(id_save_coup);
+  return 0;
 }
 
-void sauvegard_plateau_tmp(Plateau plateau) {
+int sauvegard_plateau_tmp(Plateau plateau) {
   FILE * id_save_plateau = NULL;
   id_save_plateau = fopen("save/savePlateauTmp.txt", "wt");
-  if (id_save_plateau == NULL) perror("save/savePlateauTmp.txt");
+  if (id_save_plateau == NULL) return 1;
   Case case_courrante_colonne = plateau->nord;
   Case case_courrante_ligne = plateau->nord;
   fprintf(id_save_plateau, "/board\n");
@@ -117,39 +119,54 @@ void sauvegard_plateau_tmp(Plateau plateau) {
   }
   fprintf(id_save_plateau, "/endboard\n");
   fclose(id_save_plateau);
+  return 0;
 }
-  
 
-void sauvegarde(Plateau plateau) {
-//   FILE *id_save;
-//   id_save = fopen("saveTmp.txt", "
-  Case case_courrante_colonne = plateau->nord;
-  Case case_courrante_ligne = plateau->nord;
-  printf("/board\n");
-  while (case_courrante_ligne != NULL) {
-    
-    while (case_courrante_colonne != NULL) {
-      if ((int)case_courrante_colonne->valeur == 0) {
-      
-	printf(". ");
-      } else if ((int)case_courrante_colonne->valeur == 1) {
-	
-	printf("o ");
-      } else {
-	printf("* ");
-      }
-      case_courrante_colonne = case_courrante_colonne->lien[2];
+int lire(char *chaine, int longueur)
+{
+    char *positionEntree = NULL;
+ 
+    if (fgets(chaine, longueur, stdin) != NULL)  // Pas d'erreur de saisie ?
+    {
+        positionEntree = strchr(chaine, '\n'); // On recherche l'"Entrée"
+        if (positionEntree != NULL) // Si on a trouvé le retour à la ligne
+        {
+            *positionEntree = '.'; // On remplace ce caractère par \0
+            strcat(chaine, "txt\0");
+        }
+        return 0;
     }
-    printf("\n");        
-    case_courrante_ligne = case_courrante_ligne->lien[3];
-    case_courrante_colonne = case_courrante_ligne;
-    
+    else
+    {
+        return 1;
+    }
+}
+
+int sauvegarde(Plateau plateau) {
+  // Ouverture des fichier temporaire
+  FILE *id_save_coup = NULL;
+  FILE *id_save_plateau = NULL;
+  id_save_coup = fopen("save/saveCoupTmp.txt", "wt");
+  if (id_save_coup == NULL) return 1;
+  id_save_plateau = fopen("save/savePlateauTmp.txt", "wt");
+  if (id_save_plateau == NULL) return 1;
+  // création du fichier de la sauvegarde
+  FILE *id_save = NULL;
+  
+  char *nomSauvegarde, *chemain;
+  strcpy(chemain, "save/");
+  if (lire(nomSauvegarde, 25)) {
+    return 1; // erreur lors de la saisie
   }
-  printf("/endboard\n");
+  strcat(chemain, nomSauvegarde);
+  
+    
+  return 0;
 }
 
 int main(void) {
-    Plateau plateau = creer_plateau(4);
+  int erreur =0;
+  Plateau plateau = creer_plateau(4);
     
     affichage_plateau(plateau);
     printf("\n");
