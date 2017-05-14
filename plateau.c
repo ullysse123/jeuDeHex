@@ -38,39 +38,135 @@ Plateau creer_plateau(int taille) {
     return plateau;
 }
 
-void construction_lien_case(Plateau plateau, Case x) {
+void construction_lien_case(Plateau plateau, Case x){
+    
     int ligne = x->pos.ligne;
     int colonne = x->pos.colonne;
     int taille = plateau->taille-1;
-
-    printf("    [construction_lien_case] Creations des liens.\n"); // Aide pour le dev
     
-    if (colonne == 0) {
-        x->lien[4] = NULL;
-        x->lien[5] = NULL;        
-    } else if (colonne == taille) {
-        x->lien[1] = NULL;
-        x->lien[2] = NULL;
-        x->lien[5] = obtenir_case(plateau, ligne, colonne-1);
-        x->lien[5]->lien[2] = x;
-    } else {
-        x->lien[5] = obtenir_case(plateau, ligne, colonne-1);
-        x->lien[5]->lien[2] = x;
+    if(colonne == 0){
+        if(ligne == 0){
+            //Cas 1 : Angle en haut a gauche
+            x->lien[0]=NULL;
+            x->lien[1]=NULL;
+            x->lien[4]=NULL;
+            x->lien[5]=NULL;
+        }else{
+            if(ligne == taille){
+                //Cas 2 : Angle en bas a gauche
+                x->lien[0]=obtenir_case(plateau,ligne-1,colonne);
+                x->lien[0]->lien[3]=x;
+                x->lien[1]=obtenir_case(plateau,ligne-1,colonne+1);
+                x->lien[1]->lien[4]=x;
+                x->lien[3]=NULL;
+                x->lien[4]=NULL;
+                x->lien[5]=NULL;
+            }else{
+                //Cas 3 : Face gauche
+                x->lien[0]=obtenir_case(plateau,ligne-1,colonne);
+                x->lien[0]->lien[3]=x;
+                x->lien[1]=obtenir_case(plateau,ligne-1,colonne+1);
+                x->lien[1]->lien[4]=x;
+                x->lien[4]=NULL;
+                x->lien[5]=NULL;
+            }
+        }
+    }else{
+        if(colonne == taille){
+            if(ligne == 0){
+                //Cas 4 : Angle en haut a droite
+                x->lien[0]=NULL;
+                x->lien[1]=NULL;
+                x->lien[2]=NULL;
+                x->lien[5]=obtenir_case(plateau,ligne,colonne-1);
+            }else{
+                if(ligne == taille){
+                    //Cas 5 : Angle en bas a droite
+                    x->lien[0]=obtenir_case(plateau,ligne-1,colonne);
+                    x->lien[0]->lien[3]=x;
+                    x->lien[1]=NULL;
+                    x->lien[2]=NULL;
+                    x->lien[3]=NULL;
+                    x->lien[4]=NULL;
+                    x->lien[5]=obtenir_case(plateau,ligne,colonne-1);
+                    x->lien[5]->lien[2]=x;
+                }else{
+                    //Cas 6 : Face Droite
+                    x->lien[0]=obtenir_case(plateau,ligne-1,colonne);
+                    x->lien[0]->lien[3]=x;
+                    x->lien[1]=NULL;
+                    x->lien[2]=NULL;
+                    x->lien[5]=obtenir_case(plateau,ligne,colonne-1);
+                    x->lien[5]->lien[2]=x;
+                }
+            }
+        }else{
+            if(ligne == 0){
+                //Cas 7 : Face haute
+                x->lien[0]=NULL;
+                x->lien[1]=NULL;
+                x->lien[5]=obtenir_case(plateau,ligne,colonne-1);
+                x->lien[5]->lien[2]=x;
+            }else{
+                if(ligne == taille){
+                    //Cas 8 : Face Basse
+                    x->lien[0]=obtenir_case(plateau,ligne-1,colonne);
+                    x->lien[0]->lien[3]=x;
+                    x->lien[1]=obtenir_case(plateau,ligne-1,colonne-1);
+                    x->lien[1]->lien[4]=x;
+                    x->lien[3]=NULL;
+                    x->lien[4]=NULL;
+                    x->lien[5]=obtenir_case(plateau,ligne,colonne-1);
+                    x->lien[5]->lien[2]=x;
+                }else{
+                    //Cas 9 : Centre
+                    x->lien[0]=obtenir_case(plateau,ligne-1,colonne);
+                    x->lien[0]->lien[3]=x;
+                    x->lien[1]=obtenir_case(plateau,ligne-1,colonne+1);
+                    x->lien[1]->lien[4]=x;
+                    x->lien[5]=obtenir_case(plateau,ligne,colonne-1);
+                    x->lien[5]->lien[2]=x;
+                }
+            }
+        }
     }
     
-    if (ligne == 0) {
-        x->lien[0] = NULL;
-        x->lien[1] = NULL;
-    } else if (ligne == taille) {
-        x->lien[3] = NULL;
-        x->lien[4] = NULL;
-        x->lien[0] = obtenir_case(plateau, ligne-1, colonne);
-        x->lien[0]->lien[3] = x;
-    } else {
-        x->lien[0] = obtenir_case(plateau, ligne-1, colonne);
-        x->lien[0]->lien[3] = x;
-    }
 }
+
+// void construction_lien_case(Plateau plateau, Case x) {
+//     
+//     int ligne = x->pos.ligne;
+//     int colonne = x->pos.colonne;
+//     int taille = plateau->taille-1;
+// 
+//     printf("    [construction_lien_case] Creations des liens.\n"); // Aide pour le dev
+//     
+//     if (colonne == 0) {
+//         x->lien[4] = NULL;
+//         x->lien[5] = NULL;        
+//     } else if (colonne == taille) {
+//         x->lien[1] = NULL;
+//         x->lien[2] = NULL;
+//         x->lien[5] = obtenir_case(plateau, ligne, colonne-1);
+//         x->lien[5]->lien[2] = x;
+//     } else {
+//         x->lien[5] = obtenir_case(plateau, ligne, colonne-1);
+//         x->lien[5]->lien[2] = x;
+//     }
+//     
+//     if (ligne == 0) {
+//         x->lien[0] = NULL;
+//         x->lien[1] = NULL;
+//     } else if (ligne == taille) {
+//         x->lien[3] = NULL;
+//         x->lien[4] = NULL;
+//         x->lien[0] = obtenir_case(plateau, ligne-1, colonne);
+//         x->lien[0]->lien[3] = x;
+//     } else {
+//         x->lien[0] = obtenir_case(plateau, ligne-1, colonne);
+//         x->lien[0]->lien[3] = x;
+//     }
+// }
 
 Case obtenir_case(Plateau plateau, int ligne, int colonne) {
     Case case_chercher = plateau->nord;
@@ -147,8 +243,8 @@ int nombreCaseCouleur(Plateau plateau){
 }
 
 
-// Couleur estFini(Plateau *plateau);
-// int plusGrandGroupe(Plateau *plateau);
+// Couleur estFini(Plateau plateau);
+// int plusGrandGroupe(Plateau plateau);
 
 void supprimerPlateau(Plateau *plateau){
     
