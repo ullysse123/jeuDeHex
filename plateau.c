@@ -8,7 +8,8 @@
 Plateau creer_plateau(int taille) {
     printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
     Plateau plateau = malloc(sizeof(struct s_Plateau));
-    plateau->taille = 4;
+    if (taille<2) plateau->taille = 2;
+    else plateau->taille = taille;
 
     /* construction du sommet nord */
     plateau->nord = creer_case(0,0);
@@ -149,4 +150,63 @@ int nombreCaseCouleur(Plateau plateau){
 // Couleur estFini(Plateau *plateau);
 // int plusGrandGroupe(Plateau *plateau);
 
-// void supprimerPlateau(Plateau *plateau);
+void supprimerPlateau(Plateau *plateau){
+    
+    Case case_courrante = (*plateau)->nord;
+    Case case_suivante = case_courrante->lien[2];
+    int taille = (*plateau)->taille;
+    
+    //Tant que case_suivante != NULL on continue
+    while (case_suivante != NULL){
+        //Si case->colonne == 0 alors
+        //Parcours vers la droite tant qu case->colonne != taille-1
+        if(case_courrante->pos.colonne == 0 && case_suivante != NULL){
+            
+            while (case_courrante->pos.colonne != taille-1) {
+                supprimerCase(case_courrante);
+                case_courrante = case_suivante;
+                if(case_courrante->pos.colonne != taille-1){
+                    case_suivante = case_courrante->lien[2];
+                }else{
+                    if(case_courrante->lien[3] != NULL){
+                        case_suivante = case_courrante->lien[3];
+                    }else{
+                        case_suivante = NULL;
+                    }
+                }
+            }
+        }
+        //Preparation au parcours vers la gauche
+        if(case_suivante != NULL){
+            case_courrante = case_suivante;
+            case_suivante = case_courrante->lien[5];
+        }
+        //Si case->colonne == taille-1 alors
+        //Parcours vers la gauche tant que case->colonne != 0
+        if(case_courrante->pos.colonne == taille-1 && case_suivante != NULL){
+            
+            while (case_courrante->pos.colonne != 0){
+                supprimerCase(case_courrante);
+                case_courrante = case_suivante;
+                if(case_courrante->pos.colonne != 0){
+                    case_suivante = case_courrante->lien[5];
+                }else{
+                    if(case_courrante->lien[3] != NULL){
+                        case_suivante = case_courrante->lien[3];
+                    }else{
+                        case_suivante = NULL;
+                    }
+                }
+            }
+        }
+        //Preparation au parcours vers la droite
+        if(case_suivante != NULL){
+            case_courrante = case_suivante;
+            case_suivante = case_courrante->lien[2];
+        }
+    }
+    //On supprime la derniere case restante
+    supprimerCase(case_courrante);
+    //On supprime le plateau
+    free(plateau);
+}
