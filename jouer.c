@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 
-int quiCommence();
+// int quiCommence();
 void jouer();
 void sauvegarde(Plateau plateau); // formatage plateau fini
 Plateau charger (FILE *fichier);
@@ -19,8 +19,7 @@ int quiCommence() {
     scanf("%d", &idJoueur);
   } while (idJoueur != 1 && idJoueur != 2 && idJoueur != 3);
   if (idJoueur == 3) {
-    idJoueur = (rand() % 2) + 1} else {
-    idJoueur;
+    idJoueur = (rand() % 2) + 1;
   }
   return idJoueur;
 }
@@ -82,9 +81,48 @@ bool abandonner(Plateau plateau) {
   return (save == 1);
 }
 
+void sauvegarde_coup_tmp(Case c) {
+  FILE * id_save_coup = NULL;
+  id_save_coup = fopen("save/saveCoupTmp.txt", "at");
+  if (id_save_coup == NULL) perror("save/saveCoupTmp.txt");
+  fprintf(id_save_coup, "/play %c %d %d\n", couleurToChar(c), c->pos.ligne, c->pos.colonne);
+  fclose(id_save_coup);
+}
+
+void sauvegard_plateau_tmp(Plateau plateau) {
+  FILE * id_save_plateau = NULL;
+  id_save_plateau = fopen("save/savePlateauTmp.txt", "wt");
+  if (id_save_plateau == NULL) perror("save/savePlateauTmp.txt");
+  Case case_courrante_colonne = plateau->nord;
+  Case case_courrante_ligne = plateau->nord;
+  fprintf(id_save_plateau, "/board\n");
+  while (case_courrante_ligne != NULL) {
+    
+    while (case_courrante_colonne != NULL) {
+      if ((int)case_courrante_colonne->valeur == 0) {
+      
+	fprintf(id_save_plateau, ". ");
+      } else if ((int)case_courrante_colonne->valeur == 1) {
+	
+	fprintf(id_save_plateau, "o ");
+      } else {
+	fprintf(id_save_plateau, "* ");
+      }
+      case_courrante_colonne = case_courrante_colonne->lien[2];
+    }
+    fprintf(id_save_plateau, "\n");        
+    case_courrante_ligne = case_courrante_ligne->lien[3];
+    case_courrante_colonne = case_courrante_ligne;
+    
+  }
+  fprintf(id_save_plateau, "/endboard\n");
+  fclose(id_save_plateau);
+}
+  
+
 void sauvegarde(Plateau plateau) {
-  FILE *id_save;
-  id_save = fopen("saveTmp.txt", "
+//   FILE *id_save;
+//   id_save = fopen("saveTmp.txt", "
   Case case_courrante_colonne = plateau->nord;
   Case case_courrante_ligne = plateau->nord;
   printf("/board\n");
@@ -116,12 +154,11 @@ int main(void) {
     affichage_plateau(plateau);
     printf("\n");
     modifierCase(plateau->nord, 1);
-    
+    sauvegarde_coup_tmp(plateau->nord);
     affichage_plateau(plateau);
     printf("\n");
     printf("%d\n", nombreCaseCouleur(plateau));
-    sauvegarde(plateau);
-    
+    sauvegard_plateau_tmp(plateau);
     abandonner(plateau);
     
     nouvellePartie();

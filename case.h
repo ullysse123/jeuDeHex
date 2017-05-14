@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 
-//Structure permettant de stocket des coordonnée ligne et colonne
+//Structure permettant de stocker des coordonnées ligne et colonne
 typedef struct s_Position{
     int ligne;
     int colonne;
