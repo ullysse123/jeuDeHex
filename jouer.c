@@ -3,13 +3,123 @@
 #include <string.h>
 #include <stdio.h>
 
-// int quiCommence();
 void jouer();
-// void sauvegarde(Plateau plateau); // formatage plateau fini
-Plateau charger (FILE *fichier);
+
+//Plateau charger (FILE *fichier);
+
 Plateau annuler (Plateau plateau, FILE* fichier);
-// bool abandonner (Plateau plateau); -> maj save ou s
-// Plateau nouvellePartie (); -> test a finaliser
+
+
+
+
+/** Fonction de purge pour les saisie clavier **/
+static void purger(void)
+
+{
+  int c;
+  // on se place au caractere entrée ou à la fin du fichier
+  while ((c = getchar()) != '\n' && c != EOF)
+  {}
+}
+
+/** Fonction de netoyage de buffer pour la saisie clavier **/
+static void clean (char *chaine)
+{
+  // on cherche le caractere entrée dans la chaine
+  char *p = strchr(chaine, '\n');
+  if (p)
+  {
+    // on le supprime de la chaine
+    *p = 0;
+  }
+  else
+  {
+    // sinon on purge
+    purger();
+  }
+}
+
+
+
+int charToInt(char c) {
+  switch (c){
+    case 'o' :
+      // case blanche
+      return 1;
+      break;
+    case '*':
+      // case noire
+      return 2;
+      break;
+    default:
+      // case vide
+      return 0;
+  }
+}
+      
+
+Plateau charger(char nom[36]){
+  printf("  <>  [charger] init\n");
+  int size;
+  Plateau plateau = NULL;
+  FILE *id_fich;
+  id_fich = fopen(nom, "rt");
+  if (id_fich == NULL) {
+    printf("Erreur Fichier innexistant ou protégé\n");
+    return plateau;
+  }
+  fseek(id_fich, 9, SEEK_SET);
+  fscanf(id_fich, "%d", &size);
+  printf("  <>  [charger] size = %d\n", size);
+  plateau = creer_plateau(size);
+  
+  char ligne[size*2];
+  fseek(id_fich, 8, SEEK_CUR);
+  
+  Case case_courrante_colonne = plateau->nord;
+  Case case_courrante_ligne = plateau->nord;
+  // parcour du plateau de jeu
+  int tour = 0;
+  while (case_courrante_ligne != NULL) {
+    int j = 0;
+    if (tour > 0) {
+      fseek(id_fich, 1, SEEK_CUR);
+    }
+    fgets(ligne, (size*2)+1, id_fich);
+    printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
+    while (case_courrante_colonne != NULL) {
+      printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante_ligne->pos.ligne, case_courrante_colonne->pos.colonne);
+      modifierCase(case_courrante_colonne, charToInt(ligne[j]));
+      case_courrante_colonne = case_courrante_colonne->lien[2];
+    affichage_plateau(plateau);
+    
+    printf("  <>  [charger] j = %d\n", j);
+      j = j+2;
+    }
+    // fin de ligne
+    
+      case_courrante_ligne = case_courrante_ligne->lien[3];
+      case_courrante_colonne = case_courrante_ligne;
+    tour ++;
+    
+  }
+  
+  // cration du fichier d'historique des coups
+  
+      fseek(id_fich, 10, SEEK_CUR);
+    fgets(ligne, 11, id_fich);
+  FILE * id_save_coup = NULL;
+  id_save_coup = fopen("save/saveCoupTmp.txt", "wt");
+  while (strcmp(ligne, "/endhex\n") !=0) {
+  //for (int i = 0; i <= nombreCaseCouleur(plateau); i++) {
+    if (strcmp(ligne, "/endboard\n") != 0) {
+      fprintf(id_save_coup, ligne);
+    }
+    fgets(ligne, 11, id_fich);
+  }
+  
+  return plateau;
+}
 
 int quiCommence() {
   int idJoueur;
@@ -127,34 +237,6 @@ int sauvegarde_plateau_tmp(Plateau plateau) {
   return 0;
 }
 
-/** Fonction de purge pour les saisie clavier **/
-static void purger(void)
-
-{
-  int c;
-  // on se place au caractere entrée ou à la fin du fichier
-  while ((c = getchar()) != '\n' && c != EOF)
-  {}
-}
-
-/** Fonction de netoyage de buffer pour la saisie clavier **/
-static void clean (char *chaine)
-{
-  // on cherche le caractere entrée dans la chaine
-  char *p = strchr(chaine, '\n');
-  if (p)
-  {
-    // on le supprime de la chaine
-    *p = 0;
-  }
-  else
-  {
-    // sinon on purge
-    purger();
-  }
-}
-
-
 
 int lire(char *chaine, int longueur) {
   printf("[save]	Nom de la sauvegarde : \n");
@@ -264,7 +346,7 @@ int sauvegarde(Plateau plateau) {
   } else {
     printf("[sauvegarde] (remove) fichier save/savePlateauTmp.txt erreur de suppression\n");
   }
-  
+  fprintf(id_save, "/endhex");
   // on ferme le fichier de sauvegarde final
   fclose(id_save);
   
@@ -299,21 +381,27 @@ bool abandonner(Plateau plateau) {
 
 
 int main(void) {
+//   Plateau plateau;
+//   plateau = charger("save/testcharge.txt");
     Plateau plateau = creer_plateau(4);
     printf("<>	[-jeux-] plateau créé\n");
+    affichage_plateau(plateau);
     
-//     affichage_plateau(plateau);
+    
+    affichage_plateau(plateau);
+    supprimerPlateau(plateau);
+    plateau = charger("save/testcharge.txt");
 //     printf("\n");
-    modifierCase(plateau->nord, 1);
+//     modifierCase(plateau->nord, 1);
 //     printf("<>	[-jeux-] case nord modifié\n");
-    sauvegarde_coup_tmp(plateau->nord);
+//     sauvegarde_coup_tmp(plateau->nord);
 //     printf("<>	[-jeux-] coup sauvegardé\n");
 //     affichage_plateau(plateau);
 //     printf("\n");
 //     printf("%d\n", nombreCaseCouleur(plateau));
-    abandonner(plateau);
+//     abandonner(plateau);
 //     printf("<>	[-jeux-] partie abandonné\n");
-    
+//     
 //     nouvellePartie();
     return 0;
 }
