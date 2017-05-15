@@ -1,6 +1,6 @@
 #ifndef __CASE__H__
 #define __CASE__H__
-
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -22,6 +22,8 @@ typedef enum e_Couleur{
 typedef struct s_Case{
     Position pos;
     Couleur valeur;
+    bool murDeb;
+    bool murFin;
     struct s_Case* lien[6];
 }*Case;
 

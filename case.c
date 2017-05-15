@@ -1,5 +1,6 @@
 #include "case.h"
 #include "plateau.h"
+#include <stdbool.h>
 
 
 Case creer_case(int ligne, int colonne) {
@@ -9,6 +10,8 @@ Case creer_case(int ligne, int colonne) {
     
     nouvelle_case->pos.ligne = ligne;
     nouvelle_case->pos.colonne = colonne;
+    nouvelle_case->murDeb=false;
+    nouvelle_case->murFin=false;
     
     printf("    [creer_case] la case [%d,%d] a bien ete creee.\n", nouvelle_case->pos.ligne, nouvelle_case->pos.colonne);
     

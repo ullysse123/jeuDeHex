@@ -223,7 +223,202 @@ int nombreCaseCouleur(Plateau plateau){
 }
 
 
-// Couleur estFini(Plateau plateau);
+Couleur estFini(Plateau plateau){
+    
+    //La couleur noir pour gagner doit relier le coté gauche au coté doit ( colonne 0 a colonne taille-1 )
+    //La couleur rouge pour gagner doit relier le coté haut au coté bas ( ligne 0 a ligne taille-1 )
+    
+    //On initialise nos variables
+    int i,j,k;
+    Case case_courrante;
+    printf("\n");
+    //On parcours toutes les lignes de colonne 0 a colonne taille-1 
+    //Parcour de gauche a droite
+    for( i = 0; i < (plateau->taille); i++ ){ //Colonne fixé
+        for (j = 0; j < (plateau->taille); j++){ //Ligne fixé
+            case_courrante = obtenir_case(plateau,i,j);
+            
+            if((case_courrante->pos.colonne == 0) && (case_courrante->valeur == NOIR) && (case_courrante->murDeb == false)){
+                case_courrante->murDeb = true;
+                
+            }else{
+                if ( case_courrante->valeur == NOIR){
+                    if(case_courrante->pos.ligne == 0){
+                        //Cas ou on a que les lien 5 et 4 a traiter
+                        for( k = 4; k< 6; k++ ){
+                            if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murDeb == true)){
+                        
+                                    case_courrante->murDeb = true;
+                        
+                                }
+                        }
+                    }else{
+                        if(case_courrante->pos.ligne == plateau->taille-1){
+                            //Cas ou on a que les lien 5 et 0 a traiter
+                            for( k = 5; k < 1; k = (k+1)%6){
+                                if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murDeb == true)){
+                        
+                                    case_courrante->murDeb = true;
+                        
+                                }
+                            }
+                        }else{
+                            //Parcours les liens allant vers la gauche ( 4->5->0 ) si on est pas sur un bord
+                            for( k = 4; k < 1; k = (k+1)%6){
+                                if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murDeb == true)){
+                                    
+                                    case_courrante->murDeb = true;
+                        
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //On parcours toutes les lignes de colonne taille-1 a colonne 0
+    //Parcour de droite a gauche
+    for( i = (plateau->taille-1); i >= 0; i-- ){//Colonne fixé
+        for( j = 0; j < (plateau->taille); j++){//Ligne fixé
+            
+            case_courrante = obtenir_case(plateau,i,j);
+            
+            if((case_courrante->pos.colonne == (plateau->taille-1)) && (case_courrante->valeur == NOIR) && (case_courrante->murFin == false)){
+                
+                case_courrante->murFin = true;
+                
+            }else{
+                if ( case_courrante->valeur == NOIR ){
+                    if( case_courrante->pos.ligne == 0 ){
+                        //Cas ligne du haut
+                        for( k = 2; k < 4; k++ ){
+                            if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murFin == true)){
+                        
+                                    case_courrante->murFin = true;
+                        
+                            }
+                        }
+                    }else{
+                        if( case_courrante->pos.ligne == plateau->taille-1){
+                            //Cas ligne du bas
+                            for( k = 1; k < 3; k++){
+                                if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murFin == true)){
+                            
+                                    case_courrante->murFin = true;
+                            
+                                }
+                            }
+                        }else{
+                            //Parcours les liens allant vers la droite (1->2->3)
+                            for( k = 1; k < 4; k++ ){
+                                if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murFin == true)){
+                                    
+                                    case_courrante->murFin = true;
+                            
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //On parcours toutes les colonnes de ligne 0 a ligne taille-1
+    //parcours de haut en bas
+    for( j = 0; j < (plateau->taille); j++){ //Ligne fixé
+        for( i = 0; i < (plateau->taille); i++){//colonne fixé
+            
+            case_courrante = obtenir_case(plateau,i,j);
+            
+            if((case_courrante->pos.ligne == 0) && (case_courrante->valeur == ROUGE) && (case_courrante->murDeb == false)){
+                
+                case_courrante->murDeb = true;
+                
+            }else{
+                if ( case_courrante->valeur == ROUGE ){
+                    if(case_courrante->pos.colonne == (plateau->taille-1)){
+                        //Cas colonne de droite
+                        
+                        if((case_courrante->lien[0]->valeur == ROUGE) && (case_courrante->lien[0]->murDeb == true)){
+                            
+                            case_courrante->murDeb = true;
+                        
+                        }
+                    }else{
+                        for ( k = 0; k < 2; k++ ){
+                            if ((case_courrante->lien[k]->valeur == ROUGE) && (case_courrante->lien[k]->murDeb == true)){
+                                
+                                case_courrante->murDeb = true;
+                            
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //On parcours toutes les colonnes de ligne taille-1 a taille 0
+    //parcour de bas en haut
+    for ( j = (plateau->taille-1); j >= 0; j--){ //Ligne fixé
+        for ( i = 0; i < (plateau->taille); i++){ //Colonne fixé
+            
+            case_courrante = obtenir_case(plateau,i,j);
+            
+            if((case_courrante->pos.ligne == (plateau->taille-1)) && (case_courrante->valeur == ROUGE) && (case_courrante->murFin == true)){
+                
+                case_courrante->murFin = true;
+                
+            }else{
+                if ( case_courrante->valeur == ROUGE ){
+                    if(case_courrante->pos.colonne == 0){
+                        //Cas colonne de gauche
+                        
+                        if((case_courrante->lien[3]->valeur == ROUGE) && (case_courrante->lien[3]->murFin == true)){
+                            
+                            case_courrante->murFin = true;
+                            
+                        }
+                    }else{
+                        for ( k = 3; k < 5; k++){
+                            if((case_courrante->lien[k]->valeur == ROUGE) && (case_courrante->lien[k]->murFin == true)){
+                                
+                                case_courrante->murFin = true;
+                            
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //On fini en verifiant si on a un gagnant et on renvoi la couleur du gagnant ou VIDE si il n'y en a pas
+    //On parcour dans un premier temps la colonne 0
+    for ( i = 0; i < (plateau->taille); i++ ){
+        
+        case_courrante = obtenir_case(plateau,i,0);
+        
+        if((case_courrante->valeur == NOIR ) && (case_courrante->murDeb == true) && (case_courrante->murFin == true)) return NOIR;
+        
+    }
+    
+    //Puis la ligne 0
+    for ( j = 0; j < (plateau->taille); j++){
+        
+        case_courrante = obtenir_case(plateau,0,j);
+        
+        if((case_courrante->valeur == ROUGE) && (case_courrante->murDeb == true) && (case_courrante->murFin == true)) return ROUGE;
+        
+    }
+    
+    //Cas ou la partie n'est pas fini on retourn VIDE
+    return VIDE;
+    
+}
 // int plusGrandGroupe(Plateau plateau);
 
 void supprimerPlateau(Plateau plateau){
