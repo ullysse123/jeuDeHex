@@ -125,6 +125,7 @@ int main(){
         //Si il veux sauvegarder
             //Sauvegarder
         //Si il veux valider
+            // sauvegarde temporaire du coup jouer
             //Passe au joueur suivant
             //Verifier si est fini et recuperer la couleur
             //Si est fini = NOIR ou ROUGE alors Arret deviens vrai
