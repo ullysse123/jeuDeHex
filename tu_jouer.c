@@ -5,7 +5,8 @@
 #include "jouer.h"
 
 int main(){
-    
-    
+    Plateau plateau;
+    plateau = charger("save/connard.txt");
+    affichage_plateau(plateau);
     return 0;
 }

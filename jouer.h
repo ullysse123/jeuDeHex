@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdool.h>
+#include <stdbool.h>
+#include "plateau.h"
 
 /*
  * Fonction qui commence :
@@ -36,7 +37,7 @@ int sauvegarde(Plateau plateau);
  *  _Prend en entrée un fichier
  *  _Renvoie un plateau
  */
-Plateau charger (FILE *fichier);
+Plateau charger (char nom[36]);
 
 /*
  * Fonction annuler
@@ -44,7 +45,7 @@ Plateau charger (FILE *fichier);
  *  _Prend en entrée le plateau de jeux et un fichier
  *  _Renvoie un plateau
  */
-Plateau annuler (Plateau plateau, FILE* fichier);
+Plateau annuler (Plateau plateau);
 
 /*
  * Fonction abandonner
