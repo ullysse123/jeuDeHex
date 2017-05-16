@@ -156,33 +156,54 @@ Plateau charger(char nom[36]){
   char ligne[size*2];
   fseek(id_fich, 8, SEEK_CUR);
   
-  Case case_courrante_colonne = plateau->nord;
-  Case case_courrante_ligne = plateau->nord;
+  Case case_courrante = NULL;
   // parcour du plateau de jeu
   int tour = 0;
-  while (case_courrante_ligne != NULL) {
-    int j = 0;
+  for(int i = 0; i < (plateau->taille); i++ ){ //Colonne fixé
+    int x = 0;
     if (tour > 0) {
       fseek(id_fich, 1, SEEK_CUR);
     }
     fgets(ligne, (size*2)+1, id_fich);
     printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
-    while (case_courrante_colonne != NULL) {
-      printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante_ligne->pos.ligne, case_courrante_colonne->pos.colonne);
-      modifierCase(case_courrante_colonne, charToInt(ligne[j]));
-      case_courrante_colonne = case_courrante_colonne->lien[2];
+    for (int j = 0; j < (plateau->taille); j++){ //Ligne fixé
+      printf("  <>  [charger] i = %d / j = %d\n", i, j);
+      case_courrante = obtenir_case(plateau,i,j);
+      printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante->pos.ligne, case_courrante->pos.colonne);
+      modifierCase(case_courrante, charToInt(ligne[x]));
+      case_courrante = case_courrante->lien[2];
       affichage_plateau(plateau);
-    
-      printf("  <>  [charger] j = %d\n", j);
-      j = j+2;
+      printf("  <>  [charger] x = %d\n", x);
+      x = x +2;
     }
-    // fin de ligne
-    
-    case_courrante_ligne = case_courrante_ligne->lien[3];
-    case_courrante_colonne = case_courrante_ligne;
     tour ++;
     printf("  <>  [charger] tour = %d\n", tour);
   }
+	    
+	    
+//   while (case_courrante_ligne != NULL) {
+//     int j = 0;
+//     if (tour > 0) {
+//       fseek(id_fich, 1, SEEK_CUR);
+//     }
+//     fgets(ligne, (size*2)+1, id_fich);
+//     printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
+//     while (case_courrante_colonne != NULL) {
+//       printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante_ligne->pos.ligne, case_courrante_colonne->pos.colonne);
+//       modifierCase(case_courrante_colonne, charToInt(ligne[j]));
+//       case_courrante_colonne = case_courrante_colonne->lien[2];
+//       affichage_plateau(plateau);
+//     
+//       printf("  <>  [charger] j = %d\n", j);
+//       j = j+2;
+//     }
+//     // fin de ligne
+//     
+//     case_courrante_ligne = case_courrante_ligne->lien[3];
+//     case_courrante_colonne = case_courrante_ligne;
+//     tour ++;
+//     printf("  <>  [charger] tour = %d\n", tour);
+//   }
     
   
   printf("  <>  [charger] cration du fichier d'historique des coups\n");
