@@ -40,7 +40,8 @@ tu_plateau: tu_plateau.o plateau.o case.o
 tu_jouer: tu_jouer.o jouer.o plateau.o case.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-
+minclean:
+	rm *.o
 
 clean:
 	rm *.o
