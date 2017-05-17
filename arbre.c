@@ -5,19 +5,45 @@
 
 #include "case.h"
 #include "plateau.h"
+#include "arbre.h"
 
-typedef struct s_Element{
-    int valeur;
-} * Element;
+//Fonction de creation d'un arbre
+Arbre creerArbre(int taille){
+    Arbre x = (Arbre)malloc(sizeof(struct s_Arbre));
+    x->plateau = creerPlateau(taille);
+    x->peutGagner = false;
+    for (int i = 0; i<(x->plateau->taille*x->plateau->taille);i++){
+        plateau->fils[i] = NULL;
+    }
+    x->tour = 0;
+    return x;
+}
 
-typedef struct s_Arbre{
-    struct s_Arbre * parent;
-    struct s_Arbre *gauche;
-    struct s_Arbre *droite;
-    int valeur;
-} *Arbre;
+//Fonction estVide
+bool estVide (Arbre x){
+    return x == NULL;
+}
 
-//Codage d'un arbre binaire basique pour commencer, je l'adapterai par la suite a nos besoins ( ABANDON CAR SUJET COMPRIS )
+//Fonction peut gagner
+bool peutGagner (Arbre x,Couleur c){
+    return c == estFini(x->plateau);
+}
+
+//Fonction ajouter fils ? ( Va rajouter tous le fils possible d'un arbre )
+Arbre ajouterFile (Arbre x){
+    return NULL;
+}
+
+//Fonction qui construit l'arbre final
+Arbre constructionArbre(Couleur c){
+    return NULL;
+}
+
+//Fonction supprimer arbre
+void supprimerArbre(Arbre x){
+    
+}
+
 
 //Ce qu'il va falloir faire :
     //Creer un arbre des possibles stockant chaque coups pouvant etre jouer, chaque sous arbre contiens les coup suivant pouvant etre joué, ... Jusqu'a ce qu'il y ai plus de coup ou l'IA peut gagner
@@ -82,59 +108,4 @@ typedef struct s_Arbre{
     //Bwef Bwef direction un jeux vidéo le temps que les coupins se réveille, je vais etre un zombie demain  Genial mais au moins le livreur me reveillera pas.
     //Je m'arrette la car je parle solo en commentaire c'est chelou.
 
-Arbre creerArbre(){
-    Arbre x = (Arbre)malloc(sizeof(struct s_Arbre));
-    x->parent = NULL;
-    x->gauche = NULL;
-    x->droite = NULL;
-    x->valeur = -1;
-    return x;
-}
 
-bool arbreVide(Arbre x){
-    if ( x == NULL ) return true;
-    else return ( x->valeur == -1 );
-}
-
-Arbre arbreGauche(Arbre x){
-    return x->gauche;
-}
-
-Arbre arbreDroit(Arbre x){
-    return x->droite;
-}
-
-Arbre arbreParent(Arbre x){
-    return x->parent;
-}
-
-Arbre ajouterFeuille(Arbre *x,int v){
-    Arbre (*cur) = x;
-    Arbre parent = NULL;
-    //Tant que l'on ne trouve pas de feuille arbreVide
-    while ( !arbreVide(*cur) ){
-        //Si la valeur est égale on sort
-        if( (*cur)->valeur == v)return;
-        parent = *cur;
-        //Si la valeur est plus grande, on va à droite sinon à gauche
-        cur=((*cur)->valeur>v)?&((*cur)->gauche):&((*cur)->droite);
-    }
-    //Si le parent n'est pas null, on attribue le parent
-    if ( parent != NULL ){
-        if ( parent->valeur>v ) parent->gauche = (*cur);
-        else parent->droite = (*cur);
-    }
-    //On alloue la feuille et on change le parent et le root avec la valeur
-    (*cur) = creerArbre();
-    (*cur)->parent = parent;
-    (*cur)->valeur = v;
-}
-
-void afficherArbre(Arbre x){
-    
-}
-
-int main(){
-    
-    return 0;
-}
