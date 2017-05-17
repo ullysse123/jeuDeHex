@@ -101,7 +101,23 @@ int demande_save(){
 int main(){
     int i;
     affichage_entete();
+    
+    
     i = menu_lancement();
+    
+    if (i == 1) { // nouvelle partie
+        Plateau nouveau_plateau = nouvellePartie();        
+    } else if (i == 2) { // chargement d'une partie existente
+        char nom_fichier_charger[25];
+        
+        scanf("%s", &nom_fichier_charger);
+        
+        charger(nom_fichier_charger);
+    } else if (i == 3) {
+        exit(0);
+    }
+    
+    printf("test");
     //Menu de lancement :
         //Nouvelle Partie
         //Charger Partie
@@ -125,7 +141,7 @@ int main(){
         //Si il veux sauvegarder
             //Sauvegarder
         //Si il veux valider
-            // sauvegarde temporaire du coup jouer
+            //sauvegarde temporaire du coup jouer
             //Passe au joueur suivant
             //Verifier si est fini et recuperer la couleur
             //Si est fini = NOIR ou ROUGE alors Arret deviens vrai
