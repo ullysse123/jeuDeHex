@@ -29,6 +29,8 @@ tu_plateau.o: tu_plateau.c plateau.h case.h
 tu_jouer.o: tu_jouer.c jouer.h plateau.h case.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
+tu_arbre.o: tu_arbre.c arbre.h plateau.h case.h
+	$(CC) -o $@ -c $< $(CFLAGS)
 
 
 tu_case: tu_case.o case.o
@@ -38,6 +40,9 @@ tu_plateau: tu_plateau.o plateau.o case.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 tu_jouer: tu_jouer.o jouer.o plateau.o case.o
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+tu_arbre: tu_arbre.o arbre.o plateau.o case.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 minclean:
