@@ -59,9 +59,9 @@ int charToInt(char c) {
       
 
       
-      
+ /*     
 Plateau annuler (Plateau plateau){
-  FILE *id_save_annuler = NULL;
+  FILE *id_save_annuler = NULL;*/
 //   char info[6];
 //   char couleur;
 //   int line;
@@ -97,8 +97,8 @@ Plateau annuler (Plateau plateau){
 //   do {
 //     printf("[annuler] test info = %s\n", info);
 //   } while (fgets(info, 12, id_save_annuler) != NULL);
-  return NULL;
-}
+//   return NULL;
+// }
 
 //Plateau annuler (Plateau plateau) {
 //   FILE * id_fichier;
@@ -135,8 +135,63 @@ Plateau annuler (Plateau plateau){
 //  return NULL;
 //}
 
+void annuler(Case c) {
+  c = modifierCase(c, '.');
+}
 
-      
+int annuler_dernier_coup(Plateau plateau) {
+  FILE * id_save_coup = NULL;
+  char trash[3]  = {};
+  char color[0] = {};
+  int l = 0;
+  int c = 0;
+  int l2 = 0;
+  int c2 = 0;
+  int ret = 0;
+  id_save_coup = fopen("save/saveCoupTmp.txt", "rt");
+  if (id_save_coup == NULL) {
+    printf("[annuler_dernier_coup] erreur lors de l'ouverrture de \"save/saveCoupTmp.txt\"\n");
+    return 1;
+  } else {
+    printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp.txt\"\n");
+  }
+  fseek(id_save_coup,0, SEEK_SET);
+  ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l, &c);
+  while ((ret != EOF) && (ret != 0)) {
+    printf("[annuler_dernier_coup] trash = %s\n", &trash[3]);
+    printf("[annuler_dernier_coup] color = %s\n", &color[0]);
+    printf("[annuler_dernier_coup] ligne = %d, colonne = %d\n", l, c);
+    ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l, &c);
+  }
+  printf("[annuler_dernier_coup] fin de boucle : ligne = %d, colonne = %d\n", l, c);
+  
+  // modification du fichier de sauvegarde et création du nouveau
+  FILE * id_new_save;
+  id_new_save = fopen("save/saveCoupTmp2.txt", "wt");
+  if (id_new_save == NULL) {
+    printf("[annuler_dernier_coup] erreur lors de l'ouverrture de \"save/saveCoupTmp2.txt\"\n");
+    return 1;
+  } else {
+    printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp2.txt\"\n");
+  }
+  fseek(id_save_coup,0, SEEK_SET);
+  ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l2, &c2);
+  while ((ret != EOF) && (ret != 0)) {
+    if (l2 != l && c2 != c) {
+      fprintf(id_new_save, "%s %s %d %d\n", &trash[3], &color[0], l2, c2);
+    }
+    printf("[annuler_dernier_coup] trash = %s\n", &trash[3]);
+    printf("[annuler_dernier_coup] color = %s\n", &color[0]);
+    printf("[annuler_dernier_coup] ligne = %d, colonne = %d\n", l2, c2);
+    ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l2, &c2);
+  }
+  printf("[annuler_dernier_coup] fin de boucle : ligne = %d, colonne = %d\n", l, c);
+  
+  Case caseAModif = obtenir_case(plateau, l, c);
+  modifierCase ( caseAModif, 0);
+  
+  return 0;
+}
       
 Plateau charger(char nom[36]){
   printf("  <>  [charger] init\n");
@@ -209,17 +264,17 @@ Plateau charger(char nom[36]){
   printf("  <>  [charger] cration du fichier d'historique des coups\n");
   // cration du fichier d'historique des coups
   //////////////////////////////////////////////////////////////////////////////////////// <=========== erreur ici !!!!
-  fseek(id_fich, 11, SEEK_CUR);
+  fseek(id_fich, 10, SEEK_CUR);
   fgets(ligne, 15, id_fich);
   FILE * id_save_coup = NULL;
   id_save_coup = fopen("save/saveCoupTmp.txt", "wt");
   printf("  <>  [charger] fichier d'historique des coups ouvert/créer\n");
-  while (strcmp(ligne, "\\endhex\0") != 0) {
+  while (strcmp(ligne, "\\endhex\n") != 0) {
     printf("  <>  [charger] /= //endhex\n");
     for (int i = 0; i <= nombreCaseCouleur(plateau); i++) {
       printf("  <>  [charger]  i = %d\n", i);
       printf("  <>  [charger]  ligne = %s\n", ligne);
-      if (strcmp(ligne, "\\endboard\n") != 0) {
+      if (strcmp(ligne, "\\endboard\n") != 0 && strcmp(ligne, "\\endhex\n") != 0) {
 	fprintf(id_save_coup, ligne);
       }
       fgets(ligne, 15, id_fich);
@@ -395,11 +450,11 @@ int sauvegarde(Plateau plateau) {
   
   
   // choix du nom de la sauvegarde (26 caractere max)
-  char nomSauvegarde[26];
+  char nomSauvegarde[25];
   char save[36] = "save/";
   printf("[sauvegarde] init\n");
   // on teste que la saisi s'effectue
-  if (lire(nomSauvegarde, 26)) {
+  if (lire(nomSauvegarde, 25)) {
   printf("[sauvegarde] erreur lire\n");
     return 1; // erreur lors de la saisie
   }
