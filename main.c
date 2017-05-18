@@ -109,14 +109,15 @@ int main(){
         Plateau nouveau_plateau = nouvellePartie();        
     } else if (i == 2) { // chargement d'une partie existente
         char nom_fichier_charger[25];
+        Plateau nouveau_plateau;
+        //scanf("%s", &nom_fichier_charger);
         
-        scanf("%s", &nom_fichier_charger);
-        
-        charger(nom_fichier_charger);
+        nouveau_plateau = charger("save/connardV2.txt");
+	
+	//sauvegarde(nouveau_plateau);
     } else if (i == 3) {
         exit(0);
     }
-    
     printf("test");
     //Menu de lancement :
         //Nouvelle Partie

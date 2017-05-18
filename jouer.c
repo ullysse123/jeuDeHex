@@ -175,16 +175,15 @@ int annuler_dernier_coup(Plateau plateau) {
     printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp2.txt\"\n");
   }
   fseek(id_save_coup,0, SEEK_SET);
-  ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l2, &c2);
-  while ((ret != EOF) && (ret != 0)) {
+  do {
+    ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l2, &c2);
     if (l2 != l && c2 != c) {
       fprintf(id_new_save, "%s %s %d %d\n", &trash[3], &color[0], l2, c2);
     }
     printf("[annuler_dernier_coup] trash = %s\n", &trash[3]);
     printf("[annuler_dernier_coup] color = %s\n", &color[0]);
     printf("[annuler_dernier_coup] ligne = %d, colonne = %d\n", l2, c2);
-    ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l2, &c2);
-  }
+  } while ((ret != EOF) && (ret != 0));
   printf("[annuler_dernier_coup] fin de boucle : ligne = %d, colonne = %d\n", l, c);
   
   Case caseAModif = obtenir_case(plateau, l, c);
@@ -192,13 +191,109 @@ int annuler_dernier_coup(Plateau plateau) {
   
   return 0;
 }
-      
+
+
+   
+   
+// Plateau charger(char nom[36]){
+//   printf("  <>  [charger] init\n");
+//   int size;
+//   Plateau plateau = NULL;
+//   FILE *id_fich;
+//   id_fich = fopen(nom, "r");
+//   if (id_fich == NULL) {
+//     printf("Erreur Fichier innexistant ou protégé\n");
+//     return plateau;
+//   }
+//   fseek(id_fich, 9, SEEK_SET);
+//   fscanf(id_fich, "%d", &size);
+//   printf("  <>  [charger] size = %d\n", size);
+//   plateau = creer_plateau(size);
+// 
+//   char ligne[size*2];
+//   fseek(id_fich, 20, SEEK_SET);
+//   
+//   Case case_courrante = NULL;
+//   // parcour du plateau de jeu
+//   int tour = 0;
+//   for(int i = 0; i < (plateau->taille); i++ ){ //Colonne fixé
+//     int x = 0;
+// 
+//     fgets(ligne, 50, id_fich);
+//     printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
+//     for (int j = 0; j < (plateau->taille); j++){ //Ligne fixé
+//       printf("VALEUR ligne = %s\n", ligne);
+//       printf("  <>  [charger] i = %d / j = %d\n", i, j);
+//       case_courrante = obtenir_case(plateau,i,j);
+//       printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante->pos.ligne, case_courrante->pos.colonne);
+//       modifierCase(case_courrante, charToInt(ligne[x]));
+//       case_courrante = case_courrante->lien[2];
+//       affichage_plateau(plateau);
+//       printf("  <>  [charger] x = %d\n", x);
+//       x = x +2;
+//     }
+//     tour ++;
+//     printf("  <>  [charger] tour = %d\n", tour);
+//   }
+// 	    
+// 	    
+// //   while (case_courrante_ligne != NULL) {
+// //     int j = 0;
+// //     if (tour > 0) {
+// //       fseek(id_fich, 1, SEEK_CUR);
+// //     }
+// //     fgets(ligne, (size*2)+1, id_fich);
+// //     printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
+// //     while (case_courrante_colonne != NULL) {
+// //       printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante_ligne->pos.ligne, case_courrante_colonne->pos.colonne);
+// //       modifierCase(case_courrante_colonne, charToInt(ligne[j]));
+// //       case_courrante_colonne = case_courrante_colonne->lien[2];
+// //       affichage_plateau(plateau);
+// //     
+// //       printf("  <>  [charger] j = %d\n", j);
+// //       j = j+2;
+// //     }
+// //     // fin de ligne
+// //     
+// //     case_courrante_ligne = case_courrante_ligne->lien[3];
+// //     case_courrante_colonne = case_courrante_ligne;
+// //     tour ++;
+// //     printf("  <>  [charger] tour = %d\n", tour);
+// //   }
+//     
+//   
+//   printf("  <>  [charger] cration du fichier d'historique des coups\n");
+//   // cration du fichier d'historique des coups
+//   //////////////////////////////////////////////////////////////////////////////////////// <=========== erreur ici !!!!
+//   fseek(id_fich, 9, SEEK_CUR);
+//   fgets(ligne, 17, id_fich);
+//   FILE * id_save_coup = NULL;
+//   id_save_coup = fopen("save/saveCoupTmp.txt", "wt");
+//   printf("  <>  [charger] fichier d'historique des coups ouvert/créer\n");
+//   while (strcmp(ligne, "\\endhex\n") != 0) {
+//     printf("  <>  [charger] /= //endhex\n");
+//     for (int i = 0; i <= nombreCaseCouleur(plateau); i++) {
+//       printf("  <>  [charger]  i = %d\n", i);
+//       printf("  <>  [charger]  ligne = %s\n", ligne);
+//       if (strcmp(ligne, "\\endboard\n") != 0 && strcmp(ligne, "\\endhex\n") != 0) {
+//         fprintf(id_save_coup, ligne);
+//       }
+//       fgets(ligne, 17, id_fich);
+//     }
+//   }
+//  
+//   return plateau;
+// }
+
+
+  
+   
 Plateau charger(char nom[36]){
   printf("  <>  [charger] init\n");
   int size;
   Plateau plateau = NULL;
   FILE *id_fich;
-  id_fich = fopen(nom, "rt");
+  id_fich = fopen(nom, "r");
   if (id_fich == NULL) {
     printf("Erreur Fichier innexistant ou protégé\n");
     return plateau;
@@ -207,82 +302,159 @@ Plateau charger(char nom[36]){
   fscanf(id_fich, "%d", &size);
   printf("  <>  [charger] size = %d\n", size);
   plateau = creer_plateau(size);
-  
-  char ligne[size*2];
-  fseek(id_fich, 8, SEEK_CUR);
+
+  char ligne[size*2]; // cahine de reception de la lecture du fichier
+  fseek(id_fich, 0, SEEK_SET); // on se repositionne au début du fichier
   
   Case case_courrante = NULL;
   // parcour du plateau de jeu
   int tour = 0;
-  for(int i = 0; i < (plateau->taille); i++ ){ //Colonne fixé
-    int x = 0;
-    if (tour > 0) {
-      fseek(id_fich, 1, SEEK_CUR);
-    }
-    fgets(ligne, (size*2)+1, id_fich);
-    printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
-    for (int j = 0; j < (plateau->taille); j++){ //Ligne fixé
-      printf("  <>  [charger] i = %d / j = %d\n", i, j);
-      case_courrante = obtenir_case(plateau,i,j);
-      printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante->pos.ligne, case_courrante->pos.colonne);
-      modifierCase(case_courrante, charToInt(ligne[x]));
-      case_courrante = case_courrante->lien[2];
-      affichage_plateau(plateau);
-      printf("  <>  [charger] x = %d\n", x);
-      x = x +2;
-    }
-    tour ++;
-    printf("  <>  [charger] tour = %d\n", tour);
-  }
-	    
-	    
-//   while (case_courrante_ligne != NULL) {
-//     int j = 0;
-//     if (tour > 0) {
+  
+  int iline = 0; // lecture des lignes du fichier
+  do {
+    fgets(ligne, (size*2) +2, id_fich);
+      printf("VALEUR ligne = %s\n", ligne);
+  } while ((ligne[0] == '/') || (strcmp(ligne, "/endhex") != 0));
+ 
+//   for(int i = 0; i < size; i++ ){ //Colonne fixé
+//     int x = 0; // varible de lecture de caractere
+//     printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
+//     for (int j = 0; j < size; j++){ //Ligne fixé
+//       printf("VALEUR ligne = %s\n", ligne);
+//       printf("  <>  [charger] i = %d / j = %d\n", i, j);
+//       case_courrante = obtenir_case(plateau,i,j);
+//       printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante->pos.ligne, case_courrante->pos.colonne);
+//       modifierCase(case_courrante, charToInt(ligne[x]));
+//       case_courrante = case_courrante->lien[2];
+//       affichage_plateau(plateau);
+//       printf("  <>  [charger] x = %d\n", x);
+//       x = x +2;
+//     }
+//     fgets(ligne, (size*2) +1, id_fich);
+//     tour ++;
+//     printf("  <>  [charger] tour = %d\n", tour);
+//   }   
+
+  
+  
+  
+  //   
+//   printf("  <>  [charger] cration du fichier d'historique des coups\n");
+//   // cration du fichier d'historique des coups
+//   //////////////////////////////////////////////////////////////////////////////////////// <=========== erreur ici !!!!
+//   fseek(id_fich, 9, SEEK_CUR);
+//   fgets(ligne, 17, id_fich);
+//   FILE * id_save_coup = NULL;
+//   id_save_coup = fopen("save/saveCoupTmp.txt", "wt");
+//   printf("  <>  [charger] fichier d'historique des coups ouvert/créer\n");
+//   while (strcmp(ligne, "\\endhex\n") != 0) {
+//     printf("  <>  [charger] /= //endhex\n");
+//     for (int i = 0; i <= nombreCaseCouleur(plateau); i++) {
+//       printf("  <>  [charger]  i = %d\n", i);
+//       printf("  <>  [charger]  ligne = %s\n", ligne);
+//       if (strcmp(ligne, "\\endboard\n") != 0 && strcmp(ligne, "\\endhex\n") != 0) {
+//         fprintf(id_save_coup, ligne);
+//       }
+//       fgets(ligne, 17, id_fich);
+//     }
+//   }
+ 
+  return plateau;
+}   
+
+   
+// Plateau charger(char nom[36]){
+//   printf("  <>  [charger] init\n");
+//   int size;
+//   Plateau plateau = NULL;
+//   FILE *id_fich;
+//   id_fich = fopen(nom, "rt");
+//   if (id_fich == NULL) {
+//     printf("Erreur Fichier innexistant ou protégé\n");
+//     return plateau;
+//   }
+//   fseek(id_fich, 9, SEEK_SET);
+//   fscanf(id_fich, "%d", &size);
+//   printf("  <>  [charger] size = %d\n", size);
+//   plateau = creer_plateau(size);
+//   
+//   char ligne[size*2];
+//   fseek(id_fich, 20, SEEK_SET);
+//   
+//   Case case_courrante = NULL;
+//   // parcour du plateau de jeu
+//   int tour = 0;
+//   for(int i = 0; i < (plateau->taille); i++ ){ //Colonne fixé
+//     int x = 0;
+//     if (tour > 0 && tour < plateau->taille-1) {
 //       fseek(id_fich, 1, SEEK_CUR);
 //     }
 //     fgets(ligne, (size*2)+1, id_fich);
 //     printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
-//     while (case_courrante_colonne != NULL) {
-//       printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante_ligne->pos.ligne, case_courrante_colonne->pos.colonne);
-//       modifierCase(case_courrante_colonne, charToInt(ligne[j]));
-//       case_courrante_colonne = case_courrante_colonne->lien[2];
+//     for (int j = 0; j < (plateau->taille); j++){ //Ligne fixé
+//       printf("  <>  [charger] i = %d / j = %d\n", i, j);
+//       case_courrante = obtenir_case(plateau,i,j);
+//       printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante->pos.ligne, case_courrante->pos.colonne);
+//       modifierCase(case_courrante, charToInt(ligne[x]));
+//       case_courrante = case_courrante->lien[2];
 //       affichage_plateau(plateau);
-//     
-//       printf("  <>  [charger] j = %d\n", j);
-//       j = j+2;
+//       printf("  <>  [charger] x = %d\n", x);
+//       x = x +2;
 //     }
-//     // fin de ligne
-//     
-//     case_courrante_ligne = case_courrante_ligne->lien[3];
-//     case_courrante_colonne = case_courrante_ligne;
 //     tour ++;
 //     printf("  <>  [charger] tour = %d\n", tour);
 //   }
-    
-  
-  printf("  <>  [charger] cration du fichier d'historique des coups\n");
-  // cration du fichier d'historique des coups
-  //////////////////////////////////////////////////////////////////////////////////////// <=========== erreur ici !!!!
-  fseek(id_fich, 10, SEEK_CUR);
-  fgets(ligne, 15, id_fich);
-  FILE * id_save_coup = NULL;
-  id_save_coup = fopen("save/saveCoupTmp.txt", "wt");
-  printf("  <>  [charger] fichier d'historique des coups ouvert/créer\n");
-  while (strcmp(ligne, "\\endhex\n") != 0) {
-    printf("  <>  [charger] /= //endhex\n");
-    for (int i = 0; i <= nombreCaseCouleur(plateau); i++) {
-      printf("  <>  [charger]  i = %d\n", i);
-      printf("  <>  [charger]  ligne = %s\n", ligne);
-      if (strcmp(ligne, "\\endboard\n") != 0 && strcmp(ligne, "\\endhex\n") != 0) {
-	fprintf(id_save_coup, ligne);
-      }
-      fgets(ligne, 15, id_fich);
-    }
-  }
- 
-  return plateau;
-}
+// 	    
+// 	    
+// //   while (case_courrante_ligne != NULL) {
+// //     int j = 0;
+// //     if (tour > 0) {
+// //       fseek(id_fich, 1, SEEK_CUR);
+// //     }
+// //     fgets(ligne, (size*2)+1, id_fich);
+// //     printf("  <>  [charger] ligne extraite au tour %d = %s\n",tour, ligne);
+// //     while (case_courrante_colonne != NULL) {
+// //       printf("  <>  [charger] ligne = %d / colonne = %d\n", case_courrante_ligne->pos.ligne, case_courrante_colonne->pos.colonne);
+// //       modifierCase(case_courrante_colonne, charToInt(ligne[j]));
+// //       case_courrante_colonne = case_courrante_colonne->lien[2];
+// //       affichage_plateau(plateau);
+// //     
+// //       printf("  <>  [charger] j = %d\n", j);
+// //       j = j+2;
+// //     }
+// //     // fin de ligne
+// //     
+// //     case_courrante_ligne = case_courrante_ligne->lien[3];
+// //     case_courrante_colonne = case_courrante_ligne;
+// //     tour ++;
+// //     printf("  <>  [charger] tour = %d\n", tour);
+// //   }
+//     
+//   
+//   printf("  <>  [charger] cration du fichier d'historique des coups\n");
+//   // cration du fichier d'historique des coups
+//   //////////////////////////////////////////////////////////////////////////////////////// <=========== erreur ici !!!!
+//   fseek(id_fich, 10, SEEK_CUR);
+//   fgets(ligne, 15, id_fich);
+//   FILE * id_save_coup = NULL;
+//   id_save_coup = fopen("save/saveCoupTmp.txt", "wt");
+//   printf("  <>  [charger] fichier d'historique des coups ouvert/créer\n");
+//   while (strcmp(ligne, "\\endhex\n") != 0) {
+//     printf("  <>  [charger] /= //endhex\n");
+//     for (int i = 0; i <= nombreCaseCouleur(plateau); i++) {
+//       printf("  <>  [charger]  i = %d\n", i);
+//       printf("  <>  [charger]  ligne = %s\n", ligne);
+//       if (strcmp(ligne, "\\endboard\n") != 0 && strcmp(ligne, "\\endhex\n") != 0) {
+// 	fprintf(id_save_coup, ligne);
+//       }
+//       fgets(ligne, 15, id_fich);
+//     }
+//   }
+//   
+//   
+//  
+//   return plateau;
+// }
 
 int quiCommence() {
   int idJoueur;
@@ -364,7 +536,7 @@ int sauvegarde_coup_tmp(Case c) {
   // vérification de l'ouverture, si impossible renvoi 1
   if (id_save_coup == NULL) return 1;
   // on enregistre le nouveau coup jouer à la suite du fichier
-  fprintf(id_save_coup, "\\play %c %d %d\n", couleurToChar(c), c->pos.ligne, c->pos.colonne);
+  fprintf(id_save_coup, "\n\\play %c %d %d", couleurToChar(c), c->pos.ligne, c->pos.colonne);
   // fermeture du fichier
   fclose(id_save_coup);
   return 0;
@@ -414,6 +586,7 @@ int sauvegarde_plateau_tmp(Plateau plateau) {
 int lire(char *chaine, int longueur) {
   printf("[save]	Nom de la sauvegarde (25 char max) : \n");
   // netoyage de la chaine (si il y à des reste d'une fonction précedante
+  clean(chaine);
   // saisi de la nouvelle chaine de caractere
   fgets(chaine, longueur * sizeof(char), stdin);
   printf("[abandon|lire] fgets effectuer\n");
@@ -474,23 +647,42 @@ int sauvegarde(Plateau plateau) {
     fclose(id_save_coup);
     fclose(id_save_plateau);
     return 1;
+  } else {
+    printf("[sauvegarde] fichier save creer\n");
   }
+    
   
   // enregistrement  de l'entête du fichier
   fprintf(id_save, "\\hex\n\\dim %d\n", plateau->taille);
+  printf("[sauvegarde] enregistrement  de l'entête du fichier\n");
   
   // copie du contenu du fichier de la sauvegarde du plateau vers le fichier de sauvegarde final
   int size = plateau->taille;
+  printf("[sauvegarde] copie du contenu du fichier de la sauvegarde du plateau size = %d\n", plateau->taille);
   
-  char line[size];
-  // on lis chaque ligne du fichier source pour l'écrire dans le nouveau fichier
+  char line[size*2];
+  // on lit chaque ligne du fichier source pour l'écrire dans le nouveau fichier
   // La taille de lecture est size * 2 car une ligne du plateau à un caractere et un espace
-  while (fgets(line, size*2, id_save_plateau) != NULL) {
+  while (fgets(line, (size*2), id_save_plateau) != NULL) {
+    printf("[sauvegarde] <> while %s\n", line);
     fprintf( id_save, "%s", line);
   }
+
+  //jzepjfepjfzjpfozejfjpoẑejpofjzef
+  //pzejpfjzpoefjpozejfpozefjpozejfoẑe
+  //zejfiozejpfjzpe
+  
+  
+  
+  
+  
+  
+  
+  
   // idem pour le fichier de sauvegarde de l'historique
   // taille est ici de 15 car le texte est formater de cette sorte : "/play . 000 000\0" 1000 case de coté maximum
-  while (fgets(line, 15, id_save_coup) != NULL) {
+  while (fgets(line, 17, id_save_coup) != NULL) {
+    printf("[sauvegarde] <> while <coup> %s\n", line);
     fprintf( id_save, "%s", line);
   }
   
