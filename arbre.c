@@ -7,6 +7,63 @@
 #include "plateau.h"
 #include "arbre.h"
 
+    /////////////////////////////////
+    /*Pile de sauvegarde d'un arbre*/
+    /////////////////////////////////
+
+typedef struct s_Element{
+    Arbre x; //Stock le père a traiter
+    int indice; //Stock l'indice suivant a traiter
+    struct s_Element * next;
+}*Element;
+ 
+typedef struct s_Pile{
+    Element top;
+}*Pile;
+
+Pile creerPile(){
+    Pile p = (Pile)malloc(sizeof(struct s_Pile));
+    p->top = NULL;
+    return p;
+}
+
+Pile push(Pile p, Arbre x, int i){
+    Element new=(Element)malloc(sizeof(struct s_Element));
+    new->x= x;
+    new->indice= i;
+    new->next = p->top;
+    p->top = new;
+    return(p);
+}
+
+bool emptyPile(Pile p){
+    return (p->top == NULL);
+}
+
+Pile pop(Pile p){
+    assert(!empty(p));
+    Element e = p->top;
+    p->top = e->next;
+    free(e);
+    return (p);
+}
+
+Element top(Pile p){
+    assert(!empty(p));
+    return(p->top);
+}
+
+void supprimerPile(Pile p){
+    while(!empty(p)){
+        pop(p);
+    }
+    free(p);
+}
+    
+    ///////////////////////
+    /*Fonction de l'arbre*/
+    ///////////////////////
+    
 //Fonction de creation d'un arbre
 Arbre creerArbre(int taille){
     Arbre x = (Arbre)malloc(sizeof(struct s_Arbre));
@@ -29,14 +86,63 @@ bool peutGagner (Arbre x,Couleur c){
     return c == estFini(x->plateau);
 }
 
-//Fonction ajouter fils ? ( Va rajouter tous le fils possible d'un arbre )
-Arbre ajouterFile (Arbre x){
-    return NULL;
+//Fonction ajouter fils ? ( Va rajouter tous les fils possible d'un arbre )
+Arbre ajouterFils (Arbre x,Couleur c){
+    Arbre parent = x;
+    Arbre cur;
+    Case traitement;
+    int taille = parent->plateau->taille;
+    int i=0;
+    int xCoord;
+    int yCoord;
+    bool modifie;
+    //On créer un fils par possibilité de coup suivant
+    while (xCoord<taille){
+        while (yCoord<taille){
+            if(obtenirCase(parent->plateau,x,y)==VIDE){
+                cur = creerArbre(parent->plateau->taille);
+                parent->fils[i] = cur;
+                cur->plateau = parent->plateau;
+                traitement=obtenirCase(cur->plateau,x,y);
+                traitement=modifierCase(traitement,c);
+                cur->tour=parent->tour+1;
+                i++;
+            }
+            y++;
+        }
+        y=0;
+        x++;
+    }
+    while(i<taille*taille){
+        //Tous les fils non alloué reçoivent NULL
+        parent->fils[i]=NULL;
+    }
+    return x;
 }
 
 //Fonction qui construit l'arbre final
-Arbre constructionArbre(Couleur c){
-    return NULL;
+Arbre constructionArbre(Couleur c,int quiCommence,int taille){ //Penser a dessiner déroullement de la construction
+    //On créé la racine de notre arbre
+    Arbre root = creerArbre(taille);
+    Arbre parent = root;
+    Element save;
+    int i = 0;
+    int tour;
+    //On initialise la couleur en fonction de quiCommence
+    Couleur joue;
+    bool fini = false;
+    //Tant que l'on a pas fini de tout créer
+    while(!fini){
+        //On sauvegarde la position du père et le numéro du fils qui viens d'etre traité
+        //On donne la couleur en fonction du tour
+        //On créer ses fils
+        //On change le père vers la case père->fils[i]
+        //On fait sa tant que le fils[0] != NULL
+        //On depile ensuite le père et on réitère l'opération
+    }
+    //On verifie la dernière ligne pour voir qui peutGagner
+    //On remonte de la feuille peutGagner a la racine pour passer tous ses parent a true
+    //On parcour l'arbre et on supprime tous les element qui ne peuvent pas gagner en partant du bas en appellant supprimerArbre
 }
 
 //Fonction supprimer arbre
@@ -104,8 +210,6 @@ void supprimerArbre(Arbre x){
     //Il joue le coup et sa rechangera la racine ...
     //Au final le joueur sera baiser et galèrera sa race a gagner XD
     //Cest la joix ! Trouver toute cette merde a 5H30 du matin ! Je m'aime. Après j'y suis depuis 2h du mat' XD
-    //La fatigue quoi, je coderai sa après le sommeil le plus proche que j'aurai donc surement après la nuit du 17 car la je vais pas pioncer sa sert a rien je serai trop décaler niveau sommeil.
-    //Bwef Bwef direction un jeux vidéo le temps que les coupins se réveille, je vais etre un zombie demain  Genial mais au moins le livreur me reveillera pas.
-    //Je m'arrette la car je parle solo en commentaire c'est chelou.
+    
 
 
