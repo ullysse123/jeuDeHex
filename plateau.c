@@ -113,7 +113,7 @@ void construction_lien_case(Plateau plateau, Case x){
                     //Cas 8 : Face Basse
                     x->lien[0]=obtenir_case(plateau,ligne-1,colonne);
                     x->lien[0]->lien[3]=x;
-                    x->lien[1]=obtenir_case(plateau,ligne-1,colonne-1);
+                    x->lien[1]=obtenir_case(plateau,ligne-1,colonne+1);
                     x->lien[1]->lien[4]=x;
                     x->lien[3]=NULL;
                     x->lien[4]=NULL;
