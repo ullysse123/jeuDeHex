@@ -238,7 +238,7 @@ Couleur estFini(Plateau plateau){
         for (j = 0; j < (plateau->taille); j++){ //Ligne fixé
             case_courrante = obtenir_case(plateau,i,j);
             
-            if((case_courrante->pos.colonne == 0) && (case_courrante->valeur == NOIR) && (case_courrante->murDeb == false)){
+            if((case_courrante->pos.colonne == 0) && (case_courrante->valeur == NOIR)){
                 case_courrante->murDeb = true;
                 
             }else{
@@ -285,7 +285,7 @@ Couleur estFini(Plateau plateau){
             
             case_courrante = obtenir_case(plateau,i,j);
             
-            if((case_courrante->pos.colonne == (plateau->taille-1)) && (case_courrante->valeur == NOIR) && (case_courrante->murFin == false)){
+            if((case_courrante->pos.colonne == (plateau->taille-1)) && (case_courrante->valeur == NOIR)){
                 
                 case_courrante->murFin = true;
                 
@@ -333,7 +333,7 @@ Couleur estFini(Plateau plateau){
             
             case_courrante = obtenir_case(plateau,i,j);
             
-            if((case_courrante->pos.ligne == 0) && (case_courrante->valeur == ROUGE) && (case_courrante->murDeb == false)){
+            if((case_courrante->pos.ligne == 0) && (case_courrante->valeur == ROUGE)){
                 
                 case_courrante->murDeb = true;
                 
@@ -368,7 +368,7 @@ Couleur estFini(Plateau plateau){
             
             case_courrante = obtenir_case(plateau,i,j);
             
-            if((case_courrante->pos.ligne == (plateau->taille-1)) && (case_courrante->valeur == ROUGE) && (case_courrante->murFin == true)){
+            if((case_courrante->pos.ligne == (plateau->taille-1)) && (case_courrante->valeur == ROUGE)){
                 
                 case_courrante->murFin = true;
                 
@@ -397,22 +397,30 @@ Couleur estFini(Plateau plateau){
     }
     
     //On fini en verifiant si on a un gagnant et on renvoi la couleur du gagnant ou VIDE si il n'y en a pas
-    //On parcour dans un premier temps la colonne 0
+    //On parcour dans un premier temps les colonnes doite et gauche
     for ( i = 0; i < (plateau->taille); i++ ){
         
         case_courrante = obtenir_case(plateau,i,0);
         
         if((case_courrante->valeur == NOIR ) && (case_courrante->murDeb == true) && (case_courrante->murFin == true)) return NOIR;
         
+        case_courrante = obtenir_case(plateau,i,(plateau->taille-1));
+        
+        if((case_courrante->valeur == NOIR ) && (case_courrante->murDeb == true) && (case_courrante->murFin == true)) return NOIR;
+        
     }
     
-    //Puis la ligne 0
+    
+    //Puis les lignes hautes et basse
     for ( j = 0; j < (plateau->taille); j++){
         
         case_courrante = obtenir_case(plateau,0,j);
         
         if((case_courrante->valeur == ROUGE) && (case_courrante->murDeb == true) && (case_courrante->murFin == true)) return ROUGE;
         
+        case_courrante = obtenir_case(plateau,(plateau->taille-1),j);
+        
+        if((case_courrante->valeur == ROUGE) && (case_courrante->murDeb == true) && (case_courrante->murFin == true)) return ROUGE;
     }
     
     //Cas ou la partie n'est pas fini on retourn VIDE
