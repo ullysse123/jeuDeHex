@@ -3,13 +3,60 @@
 #include <string.h>
 #include <stdio.h>
 
-void jouer();
+// void jouer();
 
 //Plateau charger (FILE *fichier);
 
 // Plateau annuler (Plateau plateau, FILE* fichier);
 
-
+Case jouer(Plateau plateau, Couleur joueur) {
+  
+  int ligne, colonne;
+  Case caseJouer;
+  
+  printf("  <>  <>  [jouer] debut fonction jouer\n");
+  printf("Joueur ");
+  if (joueur == 1) {
+    printf("ROUGE :\n");
+  } else {
+    printf("NOIR :\n");
+  }
+  
+  do {
+    printf("==================\n");
+    printf("entrez les coordonnees :\n(entre 1 et %d)\n", plateau->taille);
+    do {
+      printf("	ligne :");
+      scanf("%d", &ligne);
+      
+      if (ligne < 1 || ligne > plateau->taille) {
+	printf("ligne hors tableau !\n");
+      }
+    } while (ligne < 1 || ligne > plateau->taille) ;
+    
+    do {
+      printf("	colonne :");
+      scanf("%d", &colonne);
+      
+      if (colonne < 1 || colonne > plateau->taille) {
+	printf("colonne hors tableau !\n");
+      }
+    } while (colonne < 1 || colonne > plateau->taille) ;
+    caseJouer = obtenir_case(plateau, ligne-1, colonne-1);
+    if (caseJouer->valeur != 0) {
+      printf("Case déjà occupé !\n");
+    }
+    if (ligne < 1 || ligne > plateau->taille) {
+      printf("ligne hors tableau !\n");
+    }
+  } while (caseJouer->valeur != 0 );
+  
+  caseJouer = modifierCase(caseJouer, joueur);
+  
+  return caseJouer;
+  
+}
+  
 
 
 /** Fonction de purge pour les saisie clavier **/
@@ -56,141 +103,125 @@ int charToInt(char c) {
       return 0;
   }
 }
-      
-
-      
- /*     
-Plateau annuler (Plateau plateau){
-  FILE *id_save_annuler = NULL;*/
-//   char info[6];
-//   char couleur;
-//   int line;
-//   int col;
-//   char * test;
-//   id_save_annuler = fopen("save/saveCoupTmp.txt", "rt");
-//   if (id_save_annuler == NULL) {
-//     printf("[annuler] Erreur lors de l'ouverture du fichier \"save/saveCoupTmp.txt\", fichier innexistant ou protégé\nretour impossible\n");
-//     perror("saveCoup");
-//     return NULL;
-//   } else {
-//     printf("[annuler] fichier ouvert\n");
-//   }
-// //   fseek(id_save_annuler, -33, SEEK_END);
-// //   printf("[annuler] positionnement du curseur\n");  
-// //   fgets(info, 12*sizeof(char)+1, id_save_annuler);
-// //   printf("[annuler] test info = %s\n", info);
-// //   //fgetc(id_save_annuler);
-//   
-//   fseek(id_save_annuler, 0, SEEK_END);
-//   printf("[annuler] position tête de lecture = %ld\n", ftell(id_save_annuler));
-//   fseek(id_save_annuler, 1100, SEEK_CUR);
-//   printf("[annuler] position tête de lecture = %ld\n", ftell(id_save_annuler));
-//   rewind(id_save_annuler);
-// //   test = fgets(info, 12*sizeof(char), id_save_annuler);
-//   fscanf(id_save_annuler, "%s %c %d %d", info, &couleur, &line, &col);
-//   printf("[annuler] test = %s\n", test);
-//     printf("[annuler] test info = %s\n[annuler] test couleur = %c\n[annuler] test ligne = %d\n[annuler] test col = %d\n", info, couleur, line , col);
-//   test = fgets(info, 30, id_save_annuler);
-//   printf("[annuler] test = %s\n", test);
-//   fseek(id_save_annuler, 0, SEEK_END);
-//   printf("[annuler] position tête de lecture = %ld\n", ftell(id_save_annuler));
-//   do {
-//     printf("[annuler] test info = %s\n", info);
-//   } while (fgets(info, 12, id_save_annuler) != NULL);
-//   return NULL;
-// }
-
-//Plateau annuler (Plateau plateau) {
-//   FILE * id_fichier;
-//   char couleur;
-//   int ligne, c;
-//   id_fichier = fopen("save/saveCoupTmp.txt", "rt");
-//   if (id_fichier == NULL) {
-//     printf("Erreur Fichier innexistant ou protégé\n");
-//     return plateau;
-//   }
-//   fseek(id_fichier, 0, SEEK_SET);
-//   while ((c = fgetc(id_fichier)) != EOF) {
-//     printf("%c\n", c);
-//     if (c >= (int)'a' && c <= (int)'z') {
-//       printf("[annuler] caracter alphabetique\n");
-//     }
-//     else if (c == (int)'.' || c == (int)'o' || c == (int)'*') {
-//       couleur = (char)c;
-//       printf("[annuler] couleur = %c\n", couleur);
-//     } 
-//   }
-// //   fseek(id_fichier, 8, SEEK_SET);
-// //   fscanf(id_fichier, "%d", &ligne);
-// //   printf("[abandon] ligne = %d\n", ligne);
-//   
-// //   char mot[5];
-// //   char couleur;
-// //   char espace = '1';
-// //   int ligne = 0;
-// //   int colonne = 0;
-//   
-// //   fscanf(id_fichier, "%c%c%c%c%c%c%c%c%d%c%d%c", &mot[0],&mot[1],&mot[2],&mot[3],&mot[4],&espace, &couleur,&espace, &ligne,&espace, &colonne, &espace);
-// //   printf("[annuler] test info = %s\n[annuler] test couleur = %c\n[annuler] test espace = %c\n[annuler] test ligne = %d\n[annuler] test col = %d\n", mot, couleur, espace, ligne , colonne);
-//  return NULL;
-//}
 
 void annuler(Case c) {
   c = modifierCase(c, '.');
 }
 
-int annuler_dernier_coup(Plateau plateau) {
-  FILE * id_save_coup = NULL;
-  char trash[3]  = {};
-  char color[0] = {};
-  int l = 0;
-  int c = 0;
-  int l2 = 0;
-  int c2 = 0;
-  int ret = 0;
-  id_save_coup = fopen("save/saveCoupTmp.txt", "rt");
-  if (id_save_coup == NULL) {
-    printf("[annuler_dernier_coup] erreur lors de l'ouverrture de \"save/saveCoupTmp.txt\"\n");
-    return 1;
-  } else {
-    printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp.txt\"\n");
-  }
-  fseek(id_save_coup,0, SEEK_SET);
-  ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l, &c);
-  while ((ret != EOF) && (ret != 0)) {
-    printf("[annuler_dernier_coup] trash = %s\n", &trash[3]);
-    printf("[annuler_dernier_coup] color = %s\n", &color[0]);
-    printf("[annuler_dernier_coup] ligne = %d, colonne = %d\n", l, c);
-    ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l, &c);
-  }
-  printf("[annuler_dernier_coup] fin de boucle : ligne = %d, colonne = %d\n", l, c);
-  
-  // modification du fichier de sauvegarde et création du nouveau
-  FILE * id_new_save;
-  id_new_save = fopen("save/saveCoupTmp2.txt", "wt");
-  if (id_new_save == NULL) {
-    printf("[annuler_dernier_coup] erreur lors de l'ouverrture de \"save/saveCoupTmp2.txt\"\n");
-    return 1;
-  } else {
-    printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp2.txt\"\n");
-  }
-  fseek(id_save_coup,0, SEEK_SET);
-  do {
-    ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l2, &c2);
-    if (l2 != l && c2 != c) {
-      fprintf(id_new_save, "%s %s %d %d\n", &trash[3], &color[0], l2, c2);
-    }
-    printf("[annuler_dernier_coup] trash = %s\n", &trash[3]);
-    printf("[annuler_dernier_coup] color = %s\n", &color[0]);
-    printf("[annuler_dernier_coup] ligne = %d, colonne = %d\n", l2, c2);
-  } while ((ret != EOF) && (ret != 0));
-  printf("[annuler_dernier_coup] fin de boucle : ligne = %d, colonne = %d\n", l, c);
-  
-  Case caseAModif = obtenir_case(plateau, l, c);
-  modifierCase ( caseAModif, 0);
-  
-  return 0;
-}  
+// int annuler_dernier_coup(Plateau plateau) {
+//   
+//   // création fichier nouveau historique
+//   FILE * id_save_coup2 = NULL;
+//   id_save_coup2 = fopen("save/saveCoupTmp2.txt", "wt");
+//   if (id_save_coup2 != NULL) {
+//     printf("[annuler_dernier_coup] création de \"save/saveCoupTmp2.txt\"\n");
+//   }
+// 
+//   // ouverture historique
+//   FILE * id_save_coup = NULL;
+//   id_save_coup = fopen("save/saveCoupTmp.txt", "rt");
+//   if (id_save_coup == NULL) {
+//     printf("[annuler_dernier_coup] erreur lors de l'ouverrture de \"save/saveCoupTmp.txt\"\n");
+//     fclose(id_save_coup2);
+//     return 1;
+//   } else {
+//     printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp.txt\"\n");
+//   }
+// 
+//   
+//   // init variable
+//   int nbLigne = nombreCaseCouleur(plateau);
+//   printf("[nbLigne] %d\n", nbLigne);
+//   
+//   char chaine[16] = "";
+//   
+// //   char trash[5] = "";
+// //   char color = ' ';
+// //   int l = 0;
+// //   int c = 0;
+// //   int ret = 0;
+//     
+//   
+//   // boucle de lecture du fichier
+//   printf("[init curseur]\n");
+//   fseek(id_save_coup, 0, SEEK_SET);
+//   int verif = 0;
+// //   for (int i = 0; i < (nbLigne - 1); i ++) {
+// //     printf("[for]\n");
+// //     verif ++;
+// //     ret = fscanf(id_save_coup, "%s", trash);
+// //     ret = fscanf(id_save_coup, "%c", &color);
+// //     ret = fscanf(id_save_coup, "%d", &l);
+// //     ret = fscanf(id_save_coup, "%d", &c);
+// //     fprintf(id_save_coup2,"%s %c %d %d\n", trash, color, l, c);
+// //     printf("[prev for] ligne = %s %c %d %d//ret = %d\n", trash, color, l, c, ret);
+// //     
+// //   }
+//     printf("[avant while]><><><><\n");
+//   fgets(chaine, 17, id_save_coup);
+//   
+//     printf("[while]><><><><\n");
+//   while (fgets(chaine, 17, id_save_coup) == NULL) {
+//     printf("[while]><><><><\n");
+//     printf("[while]>%s\n", chaine);
+//   }
+//   printf("[end for] verfi = %d\n", verif);
+//     printf("[end for] ligne = %s\n", chaine);
+//   return 0;
+// }
+
+// int annuler_dernier_coup(Plateau plateau) {
+//   FILE * id_save_coup = NULL;
+//   char trash[3]  = {};
+//   char color[0] = {};
+//   int l = 0;
+//   int c = 0;
+//   int l2 = 0;
+//   int c2 = 0;
+//   int ret = 0;
+//   id_save_coup = fopen("save/saveCoupTmp.txt", "rt");
+//   if (id_save_coup == NULL) {
+//     printf("[annuler_dernier_coup] erreur lors de l'ouverrture de \"save/saveCoupTmp.txt\"\n");
+//     return 1;
+//   } else {
+//     printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp.txt\"\n");
+//   }
+//   fseek(id_save_coup,0, SEEK_SET);
+//   ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l, &c);
+//   while ((ret != EOF) && (ret != 0)) {
+//     printf("[annuler_dernier_coup] trash = %s\n", &trash[3]);
+//     printf("[annuler_dernier_coup] color = %s\n", &color[0]);
+//     printf("[annuler_dernier_coup] ligne = %d, colonne = %d\n", l, c);
+//     ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l, &c);
+//   }
+//   printf("[annuler_dernier_coup] fin de boucle : ligne = %d, colonne = %d\n", l, c);
+//   
+//   // modification du fichier de sauvegarde et création du nouveau
+//   FILE * id_new_save;
+//   id_new_save = fopen("save/saveCoupTmp2.txt", "wt");
+//   if (id_new_save == NULL) {
+//     printf("[annuler_dernier_coup] erreur lors de l'ouverrture de \"save/saveCoupTmp2.txt\"\n");
+//     return 1;
+//   } else {
+//     printf("[annuler_dernier_coup] ouverrture de \"save/saveCoupTmp2.txt\"\n");
+//   }
+//   fseek(id_save_coup,0, SEEK_SET);
+//   do {
+//     ret = fscanf(id_save_coup, "%s %s %d %d", &trash[3], &color[0], &l2, &c2);
+//     if (l2 != l && c2 != c) {
+//       fprintf(id_new_save, "%s %s %d %d\n", &trash[3], &color[0], l2, c2);
+//     }
+//     printf("[annuler_dernier_coup] trash = %s\n", &trash[3]);
+//     printf("[annuler_dernier_coup] color = %s\n", &color[0]);
+//     printf("[annuler_dernier_coup] ligne = %d, colonne = %d\n", l2, c2);
+//   } while ((ret != EOF) && (ret != 0));
+//   printf("[annuler_dernier_coup] fin de boucle : ligne = %d, colonne = %d\n", l, c);
+//   
+//   Case caseAModif = obtenir_case(plateau, l, c);
+//   modifierCase ( caseAModif, 0);
+//   
+//   return 0;
+// }  
    
 Plateau charger(char nom[36]){
   printf("  <>  [charger] init\n");
@@ -251,7 +282,7 @@ Plateau charger(char nom[36]){
     fprintf(id_save_coup,"%s", ligne);
     clean(ligne);
   }
- 
+  fclose(id_fich);
   return plateau;
 }   
 
@@ -296,13 +327,9 @@ int choix_couleur(int joueur) {
 Plateau nouvellePartie () {
   
   // variable utile pour une nouvelle partie
-  int size, joueur, choix;
+  int size, choix;
   Plateau plateau = NULL;
   
-  // le joueur choisi ça couleur
-  choix_couleur(1);
-  // le joueur choisi qui commence
-  joueur = quiCommence();
   
   // choix de la taille du plateau
   size = 11;
@@ -316,9 +343,7 @@ Plateau nouvellePartie () {
     scanf("%d", &size);
   }
   // création du plateau
-  plateau = creer_plateau(size);
-  printf("[nouvelle partie] id joueur = %d\n", joueur);
-  
+  plateau = creer_plateau(size);  
 
   return plateau;
 }

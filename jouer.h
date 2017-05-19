@@ -7,6 +7,11 @@
 #include <stdbool.h>
 #include "plateau.h"
 
+
+    int suppr_Tmp();
+
+    int sauvegarde_coup_tmp(Case c);
+    
 /*
  * Fonction qui commence :
  *  _Objectif choisir qui commence soit les joueurs choisissent, soit un random est fait
@@ -21,7 +26,7 @@ int quiCommence();
  *  _Ne prend pas d'entrée
  *  _Ne renvoie rien
  */
-void jouer();
+Case jouer(Plateau plateau, Couleur joueur);
 
 /*
  * Fonction sauvegarde
@@ -39,13 +44,6 @@ int sauvegarde(Plateau plateau);
  */
 Plateau charger (char nom[36]);
 
-/*
- * Fonction annuler
- *  _Objectif annuler le dernier coup joué
- *  _Prend en entrée le plateau de jeux et un fichier
- *  _Renvoie un plateau
- */
-Plateau annuler (Plateau plateau);
 
 /*
  * Fonction abandonner
@@ -63,5 +61,15 @@ bool abandonner (Plateau plateau);
  */
 Plateau nouvellePartie ();
 
+
+/*
+ * Fonction annuler
+ *  _Objectif annule le coup d'une case
+ *  _Prend une case
+ *  _Ne Renvoie Rien
+ */
+void annuler(Case c);
+
+int annuler_dernier_coup(Plateau plateau);
 
 #endif
