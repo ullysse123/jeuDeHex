@@ -6,7 +6,22 @@
 
 int main(){
     Plateau plateau;
-    plateau = charger("save/connard.txt");
-    affichage_plateau(plateau);
+    Case caseJouer;
+    Couleur gagner;
+    plateau = creer_plateau(4);
+    int joueurCourrant = 0;
+    joueurCourrant = 1;
+    do {
+      affichage_plateau(plateau);
+      caseJouer = jouer(plateau, joueurCourrant);
+      printf("[tu_jouer] estFini >\n");
+      gagner = estFini(plateau);
+      affichage_plateau(plateau);
+      sauvegarde_coup_tmp(caseJouer);
+//       joueurCourrant = ((joueurCourrant)%2)+1;
+      printf("[tu_jouer] couleur gagner = %d\n", gagner);
+    } while (gagner == 0);
+    printf("[tu_jouer] caseJouer : murDed = %d , murFin = %d\n", caseJouer->murDeb, caseJouer->murFin);
+    suppr_Tmp();
     return 0;
 }
