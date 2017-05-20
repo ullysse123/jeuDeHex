@@ -149,7 +149,6 @@ void supprimerFeuille(Arbre cur){
 
 //Fonction supprimer arbre
 void supprimerArbre(Arbre cur){
-    printf("LA\n");
     if(estVide(cur)) return;
     else{
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
@@ -157,6 +156,7 @@ void supprimerArbre(Arbre cur){
                 supprimerArbre(cur->fils[i]);
             }
         }
+        supprimerPlateau(cur->plateau);
         free(cur);
     }
 }
@@ -209,22 +209,22 @@ void marquerFilsPlusBas(Arbre cur,Couleur c){
 
 //Fonction marquerFilsAutre
 void marquerFilsAutre(Arbre cur){
-    printf("Rentre\n");
+//     printf("Rentre\n");
     if(estVide(cur)){
-        printf("est vide donc sors\n");
+//         printf("est vide donc sors\n");
         return;
     }
     else{
         
-        printf("Avant for appelle rec\n");
+//         printf("Avant for appelle rec\n");
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
-            printf("Appelle recursif avec i = %d\n",i);
+//             printf("Appelle recursif avec i = %d\n",i);
             marquerFilsAutre(cur->fils[i]);
         }
         
-        printf("Avant for verification peutGagner\n");
+//         printf("Avant for verification peutGagner\n");
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
-            printf("Test du peutGagner\n");
+//             printf("Test du peutGagner\n");
             if(!estVide(cur->fils[i])){
                 if(cur->fils[i]->peutGagner) cur->peutGagner = true;
             }
@@ -234,7 +234,7 @@ void marquerFilsAutre(Arbre cur){
     
 //Fonction supprimerPerdant
 void supprimerPerdant(Arbre cur){
-    printf("ICI\n");
+//     printf("ICI\n");
     if(estVide(cur)) return;
     else{
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
@@ -332,7 +332,7 @@ Arbre constructionArbre(Couleur c,int quiCommence,int taille){ //Penser a dessin
 //         printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-----------------------\nLOOOKKKKK\n-------------------\n\n\n\n\n\n\n\n\n\n\n\n");
         marquerFilsAutre(root);
 //     }
-    printf("Infini ?\n");
+//     printf("Infini ?\n");
     //On parcour l'arbre et on supprime tous les element qui ne peuvent pas gagner en partant du bas en appellant supprimerArbre
     supprimerPerdant(root);
     
