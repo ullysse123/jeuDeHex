@@ -134,6 +134,7 @@ Arbre ajouterFils (Arbre x,Couleur c){
 
 //SupprimerFeuille
 void supprimerFeuille(Arbre cur){
+    printf("J'y vais ?\n");
     bool trouve = false;
     int i = -1;
     while(!trouve){
@@ -148,12 +149,15 @@ void supprimerFeuille(Arbre cur){
 
 //Fonction supprimer arbre
 void supprimerArbre(Arbre cur){
+    printf("LA\n");
     if(estVide(cur)) return;
     else{
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
-            supprimerArbre(cur->fils[i]);
+            if(!estVide(cur->fils[i])){
+                supprimerArbre(cur->fils[i]);
+            }
         }
-        supprimerFeuille(cur);
+        free(cur);
     }
 }
 
@@ -230,12 +234,15 @@ void marquerFilsAutre(Arbre cur){
     
 //Fonction supprimerPerdant
 void supprimerPerdant(Arbre cur){
+    printf("ICI\n");
     if(estVide(cur)) return;
     else{
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
             marquerFilsAutre(cur->fils[i]);
         }
-        supprimerFeuille(cur);
+        if(cur->pere != NULL){
+            supprimerFeuille(cur);
+        }
     }
 }
 
@@ -321,10 +328,10 @@ Arbre constructionArbre(Couleur c,int quiCommence,int taille){ //Penser a dessin
     marquerFilsPlusBas(root,c);
 //     printf("Infini ?\n");
     //On remonte de la feuille peutGagner a la racine pour passer tous ses parent a true (while present en simple securité)
-    while(!root->peutGagner){
+//     while(!root->peutGagner){
 //         printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-----------------------\nLOOOKKKKK\n-------------------\n\n\n\n\n\n\n\n\n\n\n\n");
         marquerFilsAutre(root);
-    }
+//     }
     printf("Infini ?\n");
     //On parcour l'arbre et on supprime tous les element qui ne peuvent pas gagner en partant du bas en appellant supprimerArbre
     supprimerPerdant(root);
