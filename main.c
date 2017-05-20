@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
 
 #include "jouer.h"
 
@@ -41,6 +43,39 @@ int menu_lancement(){
     }while(confirmer != 1);
     printf("\n");
     return choix;
+}
+
+char* afficher_partie_sauvegarde(){
+  DIR * rep = NULL;
+  struct dirent* nomFichier = NULL;
+  rep = opendir("save/");
+  if (rep == NULL) {
+    return NULL;
+    printf("Erreur d'ouverture du repertoir \"save/\"\n");
+  }
+  int i = 0;
+  while ((nomFichier=readdir(rep)) != NULL) {
+    if (strcmp(nomFichier->d_name, ".") != 0 && strcmp(nomFichier->d_name, "..") != 0) {
+      i++;
+      printf("%3d) - %s\n", i, nomFichier->d_name);
+    }
+  }
+  int idF = 0;
+  do {
+    printf("saisir l'indice correspondant : ");
+    scanf("%d", &idF);
+  } while (idF > i || idF < 1);
+  i = 0;
+  rep = opendir("save/");
+  while (i!=idF) {
+    nomFichier=readdir(rep);
+    if (strcmp(nomFichier->d_name, ".") != 0 && strcmp(nomFichier->d_name, "..") != 0) {
+      i++;
+    }
+  }
+  printf("%3d)%d -%s\n", i, idF, nomFichier->d_name);
+  closedir(rep);
+  return nomFichier->d_name;
 }
 
 int menu_jeu(){
@@ -98,27 +133,106 @@ int demande_save(){
     return choix;
 }
 
+int valider(Case c) {
+  int valid;
+  do {
+    printf("souhaitez vous valider le coup ?\n	1-oui\n	2-non\n");
+    scanf("%d\n", &valid);
+  } while (valid != 0 && valid != 1);
+  if (valid == 1) {
+    sauvegarde_coup_tmp(c);
+  } else {
+    annuler(c);
+  }
+  return valid;
+}
+  
+void recuperation_nom_sauvegarde (char *nomComplet) {
+  // récupération nom + chemain de sauvegarde
+    char nom[26] = "";
+    strcat(nom,  afficher_partie_sauvegarde());
+    strcat(nomComplet, "save/");
+    strcat(nomComplet, nom);
+}
+
 int main(){
     int i;
     affichage_entete();
     
+    // récupération nom sauvegarde
+//     char nom[31] = "";
+//     strcat(nom,  afficher_partie_sauvegarde());
+//     printf("[main] %s\n",nom);
+//     char nomComplet[36] = "";
+//     strcat(nomComplet, "save/");
+//     strcat(nomComplet, nom);
     
-    i = menu_lancement();
     
-    if (i == 1) { // nouvelle partie
-        Plateau nouveau_plateau = nouvellePartie();        
-    } else if (i == 2) { // chargement d'une partie existente
-        char nom_fichier_charger[25];
-        Plateau nouveau_plateau;
-        //scanf("%s", &nom_fichier_charger);
-        
-        nouveau_plateau = charger("save/connardV2.txt");
-	
-	//sauvegarde(nouveau_plateau);
-    } else if (i == 3) {
-        exit(0);
-    }
-    printf("test");
+//     char nom[36] = "";
+//     recuperation_nom_sauvegarde(nom);
+//     printf("[main] %s\n",nom);
+  
+    
+    
+    Plateau nouveau_plateau;
+    int idjoueur;
+    
+    do { // boucle de fin de programme
+      i = menu_lancement();
+      if (i == 1) { // nouvelle partie
+	  nouveau_plateau = nouvellePartie();    
+	  idjoueur = quiCommence();
+      } else if (i == 2) { // chargement d'une partie existente
+	  char nom[36] = "";
+	  recuperation_nom_sauvegarde(nom);
+	  printf("[main] %s\n",nom);
+	  nouveau_plateau = charger(nom);
+	  affichage_plateau(nouveau_plateau);
+      } else if (i == 3) {
+	  exit(0);
+      }
+      
+      if ( i!= 3) {
+	Case c;
+	int choix;
+	int fin = 0;
+	while (fin == 0) {
+	  affichage_plateau(nouveau_plateau);
+	  c = jouer(nouveau_plateau, idjoueur);
+	  choix = menu_jeu();
+	  if (choix == 1) {
+	    sauvegarde_coup_tmp(c);
+	    idjoueur = (idjoueur % 2) + 1;
+	    fin = estFini(nouveau_plateau);
+	  } else if (choix == 2) {
+	    annuler(c);
+	  } else {
+	    int save, confirmer;
+	    do {
+	      do {
+		printf("Voulez vous sauvegarder la partie en cours ? (toute partie non sauvegarder sera perdu dans les abîmes)\n	1-oui\n	2-non\n");
+		scanf("%d", &save);
+	      } while(save != 1 && save != 2);
+	      printf("Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
+	      scanf("%d",&confirmer);
+	      printf("\n");
+	    } while(confirmer != 1);
+	    if (save == 1) {
+	      sauvegarde_coup_tmp(c);
+	      sauvegarde(nouveau_plateau);
+	    } else {
+	      suppr_Tmp();
+	    }
+	    fin = 3;
+	    supprimerPlateau(nouveau_plateau);
+	    suppr_Tmp();
+	  }
+	}
+      }
+    
+    
+    } while ( i != 3);
+    
     //Menu de lancement :
         //Nouvelle Partie
         //Charger Partie

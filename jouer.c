@@ -90,7 +90,7 @@ static void clean (char *chaine)
 
 int charToInt(char c) {
   switch (c){
-    case 'o' :
+    case 'r' :
       // case blanche
       return 1;
       break;
@@ -381,7 +381,7 @@ int sauvegarde_plateau_tmp(Plateau plateau) {
 	fprintf(id_save_plateau, ". ");
       } else if ((int)case_courrante_colonne->valeur == 1) {
 	// case blanc
-	fprintf(id_save_plateau, "o ");
+	fprintf(id_save_plateau, "r ");
       } else {
 	// case noir
 	fprintf(id_save_plateau, "* ");
@@ -395,7 +395,7 @@ int sauvegarde_plateau_tmp(Plateau plateau) {
     
   }
   // fin de tableau on écris la balise de fin
-  fprintf(id_save_plateau, "\\endboard\n");
+  fprintf(id_save_plateau, "\\endboard");
   // on ferme le fichier
   fclose(id_save_plateau);
   return 0;
@@ -446,10 +446,12 @@ int sauvegarde(Plateau plateau) {
   char save[36] = "save/";
   printf("[sauvegarde] init\n");
   // on teste que la saisi s'effectue
-  if (lire(nomSauvegarde, 25)) {
-  printf("[sauvegarde] erreur lire\n");
-    return 1; // erreur lors de la saisie
-  }
+//   if (lire(nomSauvegarde, 25)) {
+//   printf("[sauvegarde] erreur lire\n");
+//     return 1; // erreur lors de la saisie
+//   }
+  printf("entrez le nom de la sauvegarde (sans espace(s)) :\n");
+  scanf("%s", nomSauvegarde);
   // on formate le nom de la sauvegarde de la forme "save/nom_sauvergarde.txt\0"
   strcat(save, nomSauvegarde);
   strcat(save, ".txt\0");
@@ -487,17 +489,6 @@ int sauvegarde(Plateau plateau) {
     fprintf( id_save, "%s", line);
   }
 
-  //jzepjfepjfzjpfozejfjpoẑejpofjzef
-  //pzejpfjzpoefjpozejfpozefjpozejfoẑe
-  //zejfiozejpfjzpe
-  
-  
-  
-  
-  
-  
-  
-  
   // idem pour le fichier de sauvegarde de l'historique
   // taille est ici de 15 car le texte est formater de cette sorte : "/play . 000 000\0" 1000 case de coté maximum
   while (fgets(line, 17, id_save_coup) != NULL) {
@@ -529,7 +520,7 @@ int sauvegarde(Plateau plateau) {
   } else {
     printf("[sauvegarde] (remove) fichier save/savePlateauTmp.txt erreur de suppression\n");
   }
-  fprintf(id_save, "\\endhex");
+  fprintf(id_save, "\n\\endhex");
   // on ferme le fichier de sauvegarde final
   fclose(id_save);
   
