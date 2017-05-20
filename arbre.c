@@ -113,7 +113,7 @@ Arbre ajouterFils (Arbre x,Couleur c){
                 traitement=modifierCase(traitement,c);
                 cur->tour=parent->tour+1;
                 i++;
-                affichage_plateau(cur->plateau);
+//                 affichage_plateau(cur->plateau);
             }
             yCoord++;
 //             printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
@@ -134,7 +134,7 @@ Arbre ajouterFils (Arbre x,Couleur c){
 
 //SupprimerFeuille
 void supprimerFeuille(Arbre cur){
-    printf("J'y vais ?\n");
+//     printf("J'y vais ?\n");
     bool trouve = false;
     int i = -1;
     while(!trouve){
@@ -144,6 +144,7 @@ void supprimerFeuille(Arbre cur){
         }
     }
     cur->pere->fils[i]=NULL;
+    supprimerPlateau(cur->plateau);
     free(cur);
 }
 
@@ -178,6 +179,7 @@ void monterArbre(Arbre cur, Couleur Pair, Couleur Impaire){
 //             printf("Tour Paire\n");
             cur = ajouterFils(cur,Impaire);
         }
+        
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
 //             printf("Appelle recursif vers fils %d alors qu nous somme au niveau Tour : %d\n",i,cur->tour);
             monterArbre(cur->fils[i],Pair,Impaire);
@@ -238,9 +240,9 @@ void supprimerPerdant(Arbre cur){
     if(estVide(cur)) return;
     else{
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
-            marquerFilsAutre(cur->fils[i]);
+            supprimerPerdant(cur->fils[i]);
         }
-        if(cur->pere != NULL){
+        if(cur->pere != NULL && cur->fils[0]==NULL){
             supprimerFeuille(cur);
         }
     }
