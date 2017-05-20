@@ -10,6 +10,7 @@ Case creer_case(int ligne, int colonne) {
     
     nouvelle_case->pos.ligne = ligne;
     nouvelle_case->pos.colonne = colonne;
+    nouvelle_case->valeur = VIDE;
     nouvelle_case->murDeb=false;
     nouvelle_case->murFin=false;
     
