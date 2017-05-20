@@ -11,54 +11,54 @@
     /*Pile de sauvegarde d'un arbre*/
     /////////////////////////////////
 
-typedef struct s_Element{
-    Arbre x; //Stock le père a traiter
-    int indice; //Stock l'indice suivant a traiter
-    struct s_Element * next;
-}*Element;
- 
-typedef struct s_Pile{
-    Element top;
-}*Pile;
-
-Pile creerPile(){
-    Pile p = (Pile)malloc(sizeof(struct s_Pile));
-    p->top = NULL;
-    return p;
-}
-
-Pile push(Pile p, Arbre x, int i){
-    Element new=(Element)malloc(sizeof(struct s_Element));
-    new->x= x;
-    new->indice= i;
-    new->next = p->top;
-    p->top = new;
-    return(p);
-}
-
-bool emptyPile(Pile p){
-    return (p->top == NULL);
-}
-
-Pile pop(Pile p){
-    assert(!empty(p));
-    Element e = p->top;
-    p->top = e->next;
-    free(e);
-    return (p);
-}
-
-Element top(Pile p){
-    assert(!empty(p));
-    return(p->top);
-}
-
-void supprimerPile(Pile p){
-    while(!empty(p)){
-        pop(p);
-    }
-    free(p);
-}
+// typedef struct s_Element{
+//     Arbre x; //Stock le père a traiter
+//     int indice; //Stock l'indice suivant a traiter
+//     struct s_Element * next;
+// }*Element;
+//  
+// typedef struct s_Pile{
+//     Element top;
+// }*Pile;
+// 
+// Pile creerPile(){
+//     Pile p = (Pile)malloc(sizeof(struct s_Pile));
+//     p->top = NULL;
+//     return p;
+// }
+// 
+// Pile push(Pile p, Arbre x, int i){
+//     Element new=(Element)malloc(sizeof(struct s_Element));
+//     new->x= x;
+//     new->indice= i;
+//     new->next = p->top;
+//     p->top = new;
+//     return(p);
+// }
+// 
+// bool emptyPile(Pile p){
+//     return (p->top == NULL);
+// }
+// 
+// Pile pop(Pile p){
+//     assert(!empty(p));
+//     Element e = p->top;
+//     p->top = e->next;
+//     free(e);
+//     return (p);
+// }
+// 
+// Element top(Pile p){
+//     assert(!empty(p));
+//     return(p->top);
+// }
+// 
+// void supprimerPile(Pile p){
+//     while(!empty(p)){
+//         pop(p);
+//     }
+//     free(p);
+// }
     
     ///////////////////////
     /*Fonction de l'arbre*/
@@ -67,10 +67,11 @@ void supprimerPile(Pile p){
 //Fonction de creation d'un arbre
 Arbre creerArbre(int taille){
     Arbre x = (Arbre)malloc(sizeof(struct s_Arbre));
-    x->plateau = creerPlateau(taille);
+    x->plateau = creer_plateau(taille);
     x->peutGagner = false;
+    x->pere = NULL;
     for (int i = 0; i<(x->plateau->taille*x->plateau->taille);i++){
-        plateau->fils[i] = NULL;
+        x->fils[i] = NULL;
     }
     x->tour = 0;
     return x;
@@ -93,25 +94,25 @@ Arbre ajouterFils (Arbre x,Couleur c){
     Case traitement;
     int taille = parent->plateau->taille;
     int i=0;
-    int xCoord;
-    int yCoord;
-    bool modifie;
+    int xCoord=0;
+    int yCoord=0;
     //On créer un fils par possibilité de coup suivant
     while (xCoord<taille){
         while (yCoord<taille){
-            if(obtenirCase(parent->plateau,x,y)==VIDE){
+            if(obtenir_case(parent->plateau,xCoord,yCoord)==VIDE){
                 cur = creerArbre(parent->plateau->taille);
                 parent->fils[i] = cur;
+                cur->pere = parent;
                 cur->plateau = parent->plateau;
-                traitement=obtenirCase(cur->plateau,x,y);
+                traitement=obtenir_case(cur->plateau,xCoord,yCoord);
                 traitement=modifierCase(traitement,c);
                 cur->tour=parent->tour+1;
                 i++;
             }
-            y++;
+            yCoord++;
         }
-        y=0;
-        x++;
+        yCoord=0;
+        xCoord++;
     }
     while(i<taille*taille){
         //Tous les fils non alloué reçoivent NULL
@@ -120,33 +121,180 @@ Arbre ajouterFils (Arbre x,Couleur c){
     return x;
 }
 
+//SupprimerFeuille
+void supprimerFeuille(Arbre cur){
+    bool trouve = false;
+    int i = -1;
+    while(!trouve){
+        i++;
+        if(cur->pere->fils[i]==cur){
+            trouve=true;
+        }
+    }
+    cur->pere->fils[i]=NULL;
+    free(cur);
+}
+
+//Fonction supprimer arbre
+void supprimerArbre(Arbre cur){
+    if(estVide(cur)) return;
+    else{
+        for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+            supprimerArbre(cur->fils[i]);
+        }
+        supprimerFeuille(cur);
+    }
+}
+
+//Fonction monterArbre
+void monterArbre(Arbre cur, Couleur Pair, Couleur Impaire){
+    if(estVide(cur)) return;
+    else{
+        //On creer le fils en fonction de la couleur qui doit jouer
+        if ((cur->tour+1)%2 == 0){
+            cur = ajouterFils(cur,Pair);
+        }else{
+            cur = ajouterFils(cur,Impaire);
+        }
+        for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+            monterArbre(cur->fils[i],Pair,Impaire);
+        }
+    }
+}
+
+//Fonction marquerFilsPlusBas
+void marquerFilsPlusBas(Arbre cur,Couleur c){
+    if(estVide(cur)) return;
+    else{
+        
+        if(cur->fils[0] == NULL){
+            //Si on est au plus bas on teste si la feuille peut gagner
+            if(estFini(cur->plateau) == c) cur->peutGagner=true;
+        }
+        
+        for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+            marquerFilsPlusBas(cur->fils[i],c);
+        }
+    }
+}
+
+//Fonction marquerFilsAutre
+void marquerFilsAutre(Arbre cur){
+    if(estVide(cur))return;
+    else{
+        
+        for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+            marquerFilsAutre(cur->fils[i]);
+        }
+        
+        for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+            if(cur->fils[i]->peutGagner) cur->peutGagner = true;
+        }
+    }
+}
+    
+//Fonction supprimerPerdant
+void supprimerPerdant(Arbre cur){
+    if(estVide(cur)) return;
+    else{
+        for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+            marquerFilsAutre(cur->fils[i]);
+        }
+        supprimerFeuille(cur);
+    }
+}
+
 //Fonction qui construit l'arbre final
 Arbre constructionArbre(Couleur c,int quiCommence,int taille){ //Penser a dessiner déroullement de la construction
     //On créé la racine de notre arbre
     Arbre root = creerArbre(taille);
-    Arbre parent = root;
-    Element save;
-    int i = 0;
-    int tour;
+//     Arbre cur = root
+    //Sauvegarde de la position et de l'indice
+//     Element save;
+    //Pile de sauvegarde
+//     Pile p = creerPile();
+    //Autres variables
+//     int i = 0;
+//     int tour;
     //On initialise la couleur en fonction de quiCommence
-    Couleur joue;
-    bool fini = false;
-    //Tant que l'on a pas fini de tout créer
-    while(!fini){
-        //On sauvegarde la position du père et le numéro du fils qui viens d'etre traité
-        //On donne la couleur en fonction du tour
-        //On créer ses fils
-        //On change le père vers la case père->fils[i]
-        //On fait sa tant que le fils[0] != NULL
-        //On depile ensuite le père et on réitère l'opération
+    Couleur Pair;
+    Couleur Impaire;
+    if ( quiCommence == 0 ){
+        Pair = c;
+        Impaire = c%2+1;
+    }else{
+        Impaire = c;
+        Pair = c%2+1;
     }
+    //Booleen de fin de boucle
+//     bool fini = false;
+    
+    //Tant que l'on a pas fini de tout créer
+//     while(!fini){
+//         
+//         //On creer le fils en fonction de la couleur qui doit jouer
+//         if ((cur->tour+1)%2 = 0){
+//             cur = ajouterFils(cur,Pair);
+//         }else{
+//             cur = ajouterFils(cur,Impaire);
+//         }
+//         //On sauvegarde l'indice i ainsi que la position 
+//         p = push(p,cur,i);
+//         //On verifie que l'on peut encore faire des fils
+//         if (cur->fils[0]==NULL){
+//             save = top(p);
+//             p = pop(p);
+//             cur = save->x;
+//             i = save->indice+1;
+//             if(cur->fils[i+1]!=NULL){
+//                 p = push(p,cur,i);
+//             }
+//             cur = cur->fils[i];
+//             i = 0;
+//         }else{
+//             //On verifie si on a traiter tous les fils
+//             if (cur->fils[i] == NULL){
+//                 save = top(p);
+//                 p = pop(p)
+//                 cur = save->x;
+//                 i = save->indice+1;
+//                 if(cur->fils[i+1]!=NULL){
+//                     p = push(p,cur,i);
+//                 }
+//                 cur = cur->fils[i];
+//                 i = 0;
+//                 
+//             }else{
+//             //Cas générale
+//                 i = 0;
+//                 cur = cur->fils[i];
+//                 
+//             }
+//         }
+//         //On commence par verifier que l'on a fini ou pas le traitement
+//         if ( cur == root && i>=taille*taille ){
+//             fini = true;
+//         }
+//     }
+    
+    //On monte notre arbre
+    monterArbre(root,Pair,Impaire);
+    
     //On verifie la dernière ligne pour voir qui peutGagner
-    //On remonte de la feuille peutGagner a la racine pour passer tous ses parent a true
+//     i = 0;
+//     cur = root;
+    marquerFilsPlusBas(root,c);
+    
+    //On remonte de la feuille peutGagner a la racine pour passer tous ses parent a true (while present en simple securité)
+    while(!root->peutGagner){
+        marquerFilsAutre(root);
+    }
+    
     //On parcour l'arbre et on supprime tous les element qui ne peuvent pas gagner en partant du bas en appellant supprimerArbre
-}
-
-//Fonction supprimer arbre
-void supprimerArbre(Arbre x){
+    supprimerPerdant(root);
+    
+    //On retourne l'arbre
+    return root;
     
 }
 

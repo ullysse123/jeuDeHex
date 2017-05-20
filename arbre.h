@@ -10,6 +10,7 @@ typedef struct s_Arbre{
     
     bool peutGagner; //Variable qui nous servira a faire le menage a la fin
     Plateau plateau; //Stocke un plateau de jeux
+    struct s_Arbre* pere;
     struct s_Arbre* fils[TAILLE_MAX*TAILLE_MAX]; //Stocke tous les coups suivant le coup actuelle possible soit plateau->taille - Tour
     int tour; //Stocke le tour auquel correspond un plateau, encore une fois pour faciliter le travail
     
@@ -50,10 +51,10 @@ Arbre ajouterFils (Arbre x,Couleur c);
 /*
  * Fonction constructionArbre
  *  _Objectif construire l'arbre final avec toutes les possibilité de jeux gagnante d'une couleur
- *  _Prend en entrée une couleur ( celle de l'IA ) et un entier 0 ou 1 (0 si joueur commence, 1 si IA commence)
+ *  _Prend en entrée une couleur ( celle de l'IA ) et un entier 0 ou 1 (0 si joueur commence, 1 si IA commence) ainsi que la taille du plateau
  *  _Renvoie un Arbre
  */
-Arbre constructionArbre(Couleur c);
+Arbre constructionArbre(Couleur c,int quiCommence,int taille);
 
 /*
  * Fonction supprimerArbre
