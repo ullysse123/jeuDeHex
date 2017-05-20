@@ -186,8 +186,8 @@ int main(){
 	  char nom[36] = "";
 	  recuperation_nom_sauvegarde(nom);
 	  printf("[main] %s\n",nom);
-	  nouveau_plateau = charger(nom);
-	  affichage_plateau(nouveau_plateau);
+	  nouveau_plateau = charger(nom, &idjoueur);
+	  idjoueur = (idjoueur % 2) + 1;
       } else if (i == 3) {
 	  exit(0);
       }

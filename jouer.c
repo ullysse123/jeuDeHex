@@ -223,7 +223,7 @@ void annuler(Case c) {
 //   return 0;
 // }  
    
-Plateau charger(char nom[36]){
+Plateau charger(char nom[36], int *idJoueur){
   printf("  <>  [charger] init\n");
   int size;
   Plateau plateau = NULL;
@@ -282,6 +282,7 @@ Plateau charger(char nom[36]){
     fprintf(id_save_coup,"%s", ligne);
     clean(ligne);
   }
+  *idJoueur = charToInt(ligne[7]);
   fclose(id_fich);
   return plateau;
 }   

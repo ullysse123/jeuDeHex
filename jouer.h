@@ -39,10 +39,10 @@ int sauvegarde(Plateau plateau);
 /*
  * Fonction charger
  *  _Objectif charger un plateau a l'aide d'un fichier de sauvegarde
- *  _Prend en entrée un fichier
- *  _Renvoie un plateau
+ *  _Prend en entrée un fichier et l'id du joueur courant
+ *  _Renvoie un plateau et la valeur du prochain joueur
  */
-Plateau charger (char nom[36]);
+Plateau charger(char nom[36], int *idJoueur);
 
 
 /*
