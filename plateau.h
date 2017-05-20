@@ -90,4 +90,6 @@ void supprimerPlateau(Plateau plateau);
  */
 char couleurToChar(Case c);
 
+Plateau copierPlateau(Plateau x);
+
 #endif

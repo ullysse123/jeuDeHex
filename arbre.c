@@ -100,18 +100,20 @@ Arbre ajouterFils (Arbre x,Couleur c){
     int yCoord=0;
     //On créer un fils par possibilité de coup suivant
     while (xCoord<taille){
-//         printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
+//         printf("Taille : %d, xCoord = %d, yCoord = %d, i= %d\n",taille,xCoord,yCoord,i);
         while (yCoord<taille){
 //             printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
-            if(obtenir_case(parent->plateau,xCoord,yCoord)==VIDE){
+            if(couleurCase(obtenir_case(parent->plateau,xCoord,yCoord))==VIDE){
+//                 printf("Rassure moi je rentre ici ?\n");
                 cur = creerArbre(parent->plateau->taille);
                 parent->fils[i] = cur;
                 cur->pere = parent;
-                cur->plateau = parent->plateau;
+                cur->plateau = copierPlateau(parent->plateau);
                 traitement=obtenir_case(cur->plateau,xCoord,yCoord);
                 traitement=modifierCase(traitement,c);
                 cur->tour=parent->tour+1;
                 i++;
+                affichage_plateau(cur->plateau);
             }
             yCoord++;
 //             printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
@@ -157,9 +159,9 @@ void supprimerArbre(Arbre cur){
 
 //Fonction monterArbre
 void monterArbre(Arbre cur, Couleur Pair, Couleur Impaire){
-//     printf("Je Rentre\n");
+//     printf("Je Rentre dans monterArbre\n");
     if(estVide(cur)){
-//         printf("Je Sors\n");
+//         printf("Je Sors de monterArbre\n");
         return;
     }
     else{
@@ -173,7 +175,7 @@ void monterArbre(Arbre cur, Couleur Pair, Couleur Impaire){
             cur = ajouterFils(cur,Impaire);
         }
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
-//             printf("Montage des liens\n");
+//             printf("Appelle recursif vers fils %d alors qu nous somme au niveau Tour : %d\n",i,cur->tour);
             monterArbre(cur->fils[i],Pair,Impaire);
         }
 //         printf("Fin Traitement\n");
@@ -317,10 +319,10 @@ Arbre constructionArbre(Couleur c,int quiCommence,int taille){ //Penser a dessin
 //     i = 0;
 //     cur = root;
     marquerFilsPlusBas(root,c);
-    printf("Infini ?\n");
+//     printf("Infini ?\n");
     //On remonte de la feuille peutGagner a la racine pour passer tous ses parent a true (while present en simple securité)
     while(!root->peutGagner){
-        printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-----------------------\nLOOOKKKKK\n-------------------\n\n\n\n\n\n\n\n\n\n\n\n");
+//         printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-----------------------\nLOOOKKKKK\n-------------------\n\n\n\n\n\n\n\n\n\n\n\n");
         marquerFilsAutre(root);
     }
     printf("Infini ?\n");

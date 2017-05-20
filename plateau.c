@@ -255,7 +255,7 @@ Couleur estFini(Plateau plateau){
                     }else{
                         if(case_courrante->pos.ligne == plateau->taille-1){
                             //Cas ou on a que les lien 5 et 0 a traiter
-                            for( k = 5; k < 1; k = (k+1)%6){
+                            for( k = 5; k != 1; k = (k+1)%6){
                                 if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murDeb == true)){
                         
                                     case_courrante->murDeb = true;
@@ -264,7 +264,7 @@ Couleur estFini(Plateau plateau){
                             }
                         }else{
                             //Parcours les liens allant vers la gauche ( 4->5->0 ) si on est pas sur un bord
-                            for( k = 4; k < 1; k = (k+1)%6){
+                            for( k = 4; k != 1; k = (k+1)%6){
                                 if((case_courrante->lien[k]->valeur == NOIR) && (case_courrante->lien[k]->murDeb == true)){
                                     
                                     case_courrante->murDeb = true;
@@ -490,4 +490,25 @@ void supprimerPlateau(Plateau plateau){
     supprimerCase(case_courrante);
     //On supprime le plateau
     free(plateau);
+}
+
+Plateau copierPlateau(Plateau x){
+    
+    Plateau nouveau = creer_plateau(x->taille);
+    Case ancien;
+    Case nouveauC;
+    for(int i = 0; i < (nouveau->taille); i++ ){ //Colonne fixé
+        for (int j = 0; j < (nouveau->taille); j++){ //Ligne fixé
+            ancien = obtenir_case(x,i,j);
+            nouveauC = obtenir_case(nouveau,i,j);
+            if(ancien->valeur == ROUGE){
+                nouveauC = modifierCase(nouveauC,ROUGE);
+            }else{
+                if(ancien->valeur == NOIR){
+                    nouveauC = modifierCase(nouveauC,NOIR);
+                }
+            }
+        }
+    }
+    return nouveau;
 }
