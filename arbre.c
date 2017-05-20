@@ -79,6 +79,7 @@ Arbre creerArbre(int taille){
 
 //Fonction estVide
 bool estVide (Arbre x){
+//     printf("EST VIDE ?\n");
     return x == NULL;
 }
 
@@ -89,6 +90,7 @@ bool peutGagner (Arbre x,Couleur c){
 
 //Fonction ajouter fils ? ( Va rajouter tous les fils possible d'un arbre )
 Arbre ajouterFils (Arbre x,Couleur c){
+//     printf("Je rentre dans ajouterFils\n");
     Arbre parent = x;
     Arbre cur;
     Case traitement;
@@ -98,7 +100,9 @@ Arbre ajouterFils (Arbre x,Couleur c){
     int yCoord=0;
     //On créer un fils par possibilité de coup suivant
     while (xCoord<taille){
+//         printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
         while (yCoord<taille){
+//             printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
             if(obtenir_case(parent->plateau,xCoord,yCoord)==VIDE){
                 cur = creerArbre(parent->plateau->taille);
                 parent->fils[i] = cur;
@@ -110,14 +114,19 @@ Arbre ajouterFils (Arbre x,Couleur c){
                 i++;
             }
             yCoord++;
+//             printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
         }
         yCoord=0;
         xCoord++;
+//         printf("Taille : %d, xCoord = %d, yCoord = %d\n",taille,xCoord,yCoord);
     }
+//     printf("Je sors du while\n");
     while(i<taille*taille){
         //Tous les fils non alloué reçoivent NULL
         parent->fils[i]=NULL;
+        i++;
     }
+//     printf("Je sors de ajouterFils\n");
     return x;
 }
 
@@ -148,47 +157,71 @@ void supprimerArbre(Arbre cur){
 
 //Fonction monterArbre
 void monterArbre(Arbre cur, Couleur Pair, Couleur Impaire){
-    if(estVide(cur)) return;
+//     printf("Je Rentre\n");
+    if(estVide(cur)){
+//         printf("Je Sors\n");
+        return;
+    }
     else{
+//         printf("On Commence Traitement\n");
         //On creer le fils en fonction de la couleur qui doit jouer
         if ((cur->tour+1)%2 == 0){
+//             printf("Tour Impaire\n");
             cur = ajouterFils(cur,Pair);
         }else{
+//             printf("Tour Paire\n");
             cur = ajouterFils(cur,Impaire);
         }
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+//             printf("Montage des liens\n");
             monterArbre(cur->fils[i],Pair,Impaire);
         }
+//         printf("Fin Traitement\n");
     }
+//     printf("Sortie Final\n");
 }
 
 //Fonction marquerFilsPlusBas
 void marquerFilsPlusBas(Arbre cur,Couleur c){
-    if(estVide(cur)) return;
+
+    if(estVide(cur))
+        return;
     else{
-        
-        if(cur->fils[0] == NULL){
-            //Si on est au plus bas on teste si la feuille peut gagner
-            if(estFini(cur->plateau) == c) cur->peutGagner=true;
-        }
-        
+
+//         if(cur->fils[0] == NULL){
+//             //Si on est au plus bas on teste si la feuille peut gagner
+//             if(estFini(cur->plateau) == c) cur->peutGagner=true;
+//         }
+//((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1)        
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+
             marquerFilsPlusBas(cur->fils[i],c);
         }
+        if(estFini(cur->plateau) == c) cur->peutGagner=true;
     }
 }
 
 //Fonction marquerFilsAutre
 void marquerFilsAutre(Arbre cur){
-    if(estVide(cur))return;
+    printf("Rentre\n");
+    if(estVide(cur)){
+        printf("est vide donc sors\n");
+        return;
+    }
     else{
         
+        printf("Avant for appelle rec\n");
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
+            printf("Appelle recursif avec i = %d\n",i);
             marquerFilsAutre(cur->fils[i]);
         }
         
+        printf("Avant for verification peutGagner\n");
         for (int i = 0; i < ((cur->plateau->taille * cur->plateau->taille)-(cur->tour)+1); i++){
-            if(cur->fils[i]->peutGagner) cur->peutGagner = true;
+            printf("Test du peutGagner\n");
+            if(!estVide(cur->fils[i])){
+                if(cur->fils[i]->peutGagner) cur->peutGagner = true;
+            }
         }
     }
 }
@@ -276,20 +309,21 @@ Arbre constructionArbre(Couleur c,int quiCommence,int taille){ //Penser a dessin
 //             fini = true;
 //         }
 //     }
-    
+//     printf("Infini ?\n");
     //On monte notre arbre
     monterArbre(root,Pair,Impaire);
-    
+//     printf("Infini ?\n");
     //On verifie la dernière ligne pour voir qui peutGagner
 //     i = 0;
 //     cur = root;
     marquerFilsPlusBas(root,c);
-    
+    printf("Infini ?\n");
     //On remonte de la feuille peutGagner a la racine pour passer tous ses parent a true (while present en simple securité)
     while(!root->peutGagner){
+        printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-----------------------\nLOOOKKKKK\n-------------------\n\n\n\n\n\n\n\n\n\n\n\n");
         marquerFilsAutre(root);
     }
-    
+    printf("Infini ?\n");
     //On parcour l'arbre et on supprime tous les element qui ne peuvent pas gagner en partant du bas en appellant supprimerArbre
     supprimerPerdant(root);
     
