@@ -4,7 +4,6 @@
 
 
 Case creer_case(int ligne, int colonne) {
-    printf("[creer_case] Creation de la case [%d,%d].\n", ligne, colonne); // Aide pour le dev
     
     Case nouvelle_case = malloc(sizeof(struct s_Case));
     
@@ -13,8 +12,6 @@ Case creer_case(int ligne, int colonne) {
     nouvelle_case->valeur = VIDE;
     nouvelle_case->murDeb=false;
     nouvelle_case->murFin=false;
-    
-    printf("    [creer_case] la case [%d,%d] a bien ete creee.\n", nouvelle_case->pos.ligne, nouvelle_case->pos.colonne);
     
     return nouvelle_case;
 }

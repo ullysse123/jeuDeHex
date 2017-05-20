@@ -90,6 +90,12 @@ void supprimerPlateau(Plateau plateau);
  */
 char couleurToChar(Case c);
 
+/*
+ * Fonction qui copie un plateau
+ *  _Objectif copier un plateau
+ *  _Prend en entrée un plateau a copié
+ *  _renvoie le plateau copié
+ */
 Plateau copierPlateau(Plateau x);
 
 #endif
