@@ -1,0 +1,9 @@
+\hex
+\dim 4
+\board
+. . . . 
+. . . . 
+. . . . 
+r . . . 
+\endboard
+\play o 3 0

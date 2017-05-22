@@ -5,42 +5,34 @@
 #include <dirent.h>
 
 #include "jouer.h"
-
-void affichage_entete(){
-    //Petite fonction affichant la banderole "Jeu De Hex"
-    printf("================================================\n");
-    printf("\n");
-    printf("   ___             ______       _   _            \n");
-    printf("  |_  |            |  _  \\     | | | |           \n");
-    printf("    | | ___ _   _  | | | |___  | |_| | _____  __ \n");
-    printf("    | |/ _ \\ | | | | | | / _ \\ |  _  |/ _ \\ \\/ / \n");
-    printf("/\\__/ /  __/ |_| | | |/ /  __/ | | | |  __/>  <  \n");
-    printf("\\____/ \\___|\\__,_| |___/ \\___| \\_| |_/\\___/_/\\_\\ \n");
-    printf("\n");
-    printf("================================================\n");
-    printf("\n");
-    
-}
+#include "affichage.h"
 
 int menu_lancement(){
     //Menu apparaissant au lancement du jeux
-    int choix;
-    int confirmer;
-    printf("\n");
-    printf("Bienvenue sur le Jeu De Hex,\nQue souahitez vous faire ?\n");
-    printf(" -- LANCER UNE NOUVELLE PARTIE --            (1)\n");
-    printf(" -- CHARGER UNE PARTIE EXISTANTE --          (2)\n");
-    printf(" -- QUITTER LE JEU --                        (3)\n");
-    do{
-        do{
-            printf("Selectionnez votre choix :\n");
-            scanf("%d",&choix);
-            printf("\n");
-        }while(choix<1 || choix>3);
-        printf("Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
-        scanf("%d",&confirmer);
-        printf("\n");
-    }while(confirmer != 1);
+    int choix = 0;
+    int confirmer = 0;
+
+    while(confirmer != 1) {
+
+        if (confirmer != 1)
+            affichage_menu_principal();
+
+        if (choix == 0)
+            while(choix<1 || choix>3) {
+                printf("  Que voulez vous faire ? (1/2/3)  ");
+                scanf("%d",&choix);
+                printf("\n");
+            }
+        printf("  Confirmer (1) ? :");
+        scanf("%d", &confirmer);
+
+        if (confirmer != 1) {
+            choix = 0;
+            res_affichage_menu();
+        } else {
+            res_affichage();
+        }
+    }
     printf("\n");
     return choix;
 }
@@ -51,7 +43,7 @@ char* afficher_partie_sauvegarde(){
   rep = opendir("save/");
   if (rep == NULL) {
     return NULL;
-    printf("Erreur d'ouverture du repertoir \"save/\"\n");
+    printf("  Erreur d'ouverture du repertoir \"save/\"\n");
   }
   int i = 0;
   while ((nomFichier=readdir(rep)) != NULL) {
@@ -62,7 +54,7 @@ char* afficher_partie_sauvegarde(){
   }
   int idF = 0;
   do {
-    printf("saisir l'indice correspondant : ");
+    printf("  Saisir l'indice correspondant : ");
     scanf("%d", &idF);
   } while (idF > i || idF < 1);
   i = 0;
@@ -83,17 +75,17 @@ int menu_jeu(){
     int choix;
     int confirmer;
     printf("\n");
-    printf("Coup joue,\nQue souhaitez vous faire ?\n");
-    printf(" -- PASSER AU TOUR SUIVANT --                (1)\n");
-    printf(" -- ANULER LE DERNIER COUP JOUE --           (2)\n");
-    printf(" -- ABANDONNER LA PARTIE --                  (3)\n");
+    printf("  Coup joue,\n  Que souhaitez vous faire ?\n");
+    printf("    PASSER AU TOUR SUIVANT        (1)\n");
+    printf("    ANULER LE DERNIER COUP JOUE   (2)\n");
+    printf("    ABANDONNER LA PARTIE          (3)\n");
     do{
         do{
-            printf("Selectionnez votre choix :\n");
+            printf("  Selectionner votre choix :\n");
             scanf("%d",&choix);
             printf("\n");
         }while(choix<1 || choix>3);
-        printf("Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
+        printf("  Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
         scanf("%d",&confirmer);
         printf("\n");
     }while(confirmer != 1);
@@ -106,17 +98,17 @@ int menu_fin(){
     int choix;
     int confirmer;
     printf("\n");
-    printf("Que souhaitez vous faire maintenant ?\n");
-    printf(" -- LANCER UNE NOUVELLE PARTIE --            (1)\n");
-    printf(" -- CHARGER UNE PARTIE EXISTANTE --          (2)\n");
-    printf(" -- QUITTER LE JEU --                        (3)\n");
+    printf("  Que souhaitez vous faire maintenant ?\n");
+    printf("   (1) LANCER UNE NOUVELLE PARTIE    (1)\n");
+    printf("   (2) CHARGER UNE PARTIE EXISTANTE  (2)\n");
+    printf("   (3) QUITTER LE JEU             (3)\n");
     do{
         do{
             printf("Selectionnez votre choix :\n");
             scanf("%d",&choix);
             printf("\n");
         }while(choix<1 || choix>3);
-        printf("Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
+        printf("  Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
         scanf("%d",&confirmer);
         printf("\n");
     }while(confirmer != 1);
@@ -127,7 +119,7 @@ int menu_fin(){
 int demande_save(){
     int choix;
     printf("\n");
-    printf("Souhaitez vous effectuer une sauvegarde de votre partie ? Si oui tapez 1 sinon le chiffre de votre choix\n");
+    printf("  Souhaitez vous effectuer une sauvegarde de votre partie ?\n  Si oui tapez 1 sinon le chiffre de votre choix\n");
     scanf("%d",&choix);
     if( choix != 1) choix=0;
     return choix;
@@ -136,7 +128,7 @@ int demande_save(){
 int valider(Case c) {
   int valid;
   do {
-    printf("souhaitez vous valider le coup ?\n	1-oui\n	2-non\n");
+    printf("  Souhaitez vous valider le coup ?\n	1-oui\n	2-non\n");
     scanf("%d\n", &valid);
   } while (valid != 0 && valid != 1);
   if (valid == 1) {
@@ -156,8 +148,11 @@ void recuperation_nom_sauvegarde (char *nomComplet) {
 }
 
 int main(){
+
+    clrscr();
+
     int i;
-    affichage_entete();
+    affichage_entete_menu();
     
     // récupération nom sauvegarde
 //     char nom[31] = "";
@@ -176,7 +171,7 @@ int main(){
     
     Plateau nouveau_plateau;
     int idjoueur;
-    
+
     do { // boucle de fin de programme
       i = menu_lancement();
       if (i == 1) { // nouvelle partie
@@ -208,77 +203,49 @@ int main(){
 	    annuler(c);
 	  } else {
 	    int save, confirmer;
+
+        res_affichage();
 	    do {
 	      do {
-		printf("Voulez vous sauvegarder la partie en cours ? (toute partie non sauvegarder sera perdu dans les abîmes)\n	1-oui\n	2-non\n");
+        
+		printf("  Voulez vous sauvegarder la partie en cours ? (toute partie non sauvegardee sera perdu dans les abimes)\n	1 - oui\n	2 - non\n");
 		scanf("%d", &save);
 	      } while(save != 1 && save != 2);
-	      printf("Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
+	      printf("  Confirmez vous votre choix ? Si oui tapez 1 sinon le chiffre de votre choix\n");
 	      scanf("%d",&confirmer);
 	      printf("\n");
 	    } while(confirmer != 1);
+
+        if( confirmer == 1)
+            res_affichage_menu();
+
 	    if (save == 1) {
 	      sauvegarde_coup_tmp(c);
 	      sauvegarde(nouveau_plateau);
 	    } else {
 	      suppr_Tmp();
 	    }
+
 	    fin = 3;
+
 	    supprimerPlateau(nouveau_plateau);
 	    suppr_Tmp();
 	  }
+
 	}
+
+        res_affichage_menu();
+            printf(" \xE2\x95\x91                                                  \xE2\x95\x91\n");
+            printf(" \xE2\x95\x91  ");
+            couleur("31");
+            printf("          Le Joueur %d a gagner !", fin);
+            couleur("0");
+            printf("                \xE2\x95\x91\n");
+            printf(" \xE2\x95\x91                                                  \xE2\x95\x91\n");
       }
     
     
     } while ( i != 3);
-    
-    //Menu de lancement :
-        //Nouvelle Partie
-        //Charger Partie
-        //Quitter le jeux
-    
-    //Si Nouvelle partie
-        //Lancer une nouvelle parie
-    //Si Charger Partie
-        //Charger la partie
-    //Si quitter
-        //Fermer le programme
-    
-    //Tant que Arret est faux
-        //Jouer
-        //Afficher plateau
-        //Menu de jeux :
-            //Valider coup  
-            //Annuler le coup
-            //Sauvegarder
-            //Abandonner ( demande une si il veut sauvegarder )
-        //Si il veux sauvegarder
-            //Sauvegarder
-        //Si il veux valider
-            //sauvegarde temporaire du coup jouer
-            //Passe au joueur suivant
-            //Verifier si est fini et recuperer la couleur
-            //Si est fini = NOIR ou ROUGE alors Arret deviens vrai
-        //Sinon si il veux abandonner
-            //Lancer abandonner
-            //Supprimer fichier temp
-            //Passer arret a vrai
-        //Sinon si il veut annuler
-            //Annuler et laisser reboucler
-    
-    //Si la couleur est différente de vide
-        //Afficher le gagnant et le plateau
-    
-    //Menu de fin:
-        //Nouvelle partie
-        //Charger Partie
-        //Quitter le jeux
-    
-    //Si il quitte
-        //Supprimer fichier temp
-    
-    //En fonction du choix reboucler
-        
+
     return 0;
 }

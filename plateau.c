@@ -1,3 +1,4 @@
+#include "affichage.h"
 #include "plateau.h"
 #include "case.h"
 #include <stdbool.h>
@@ -6,7 +7,7 @@
 
 
 Plateau creer_plateau(int taille) {
-    printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
+    //printf("[creer_plateau] Creation du plateau.\n"); // Aide pour le dev
     Plateau plateau = malloc(sizeof(struct s_Plateau));
     if (taille<2) plateau->taille = 2;
     else plateau->taille = taille;
@@ -30,10 +31,10 @@ Plateau creer_plateau(int taille) {
                 nouvelle_case = creer_case(ligne, colonne);
                 construction_lien_case(plateau, nouvelle_case);
         }
-        printf("\n");
+       // printf("\n");
     }
-    printf("\n");
-    printf("\n");
+  //  printf("\n");
+    //printf("\n");
 
     return plateau;
 }
@@ -160,7 +161,7 @@ char couleurToChar(Case c){
       break;
     case 2:
       // case noir
-      return '*';
+      return 'o';
       break;
     default:
       // case vide
@@ -174,11 +175,28 @@ void affichage_plateau(Plateau plateau) {
   Case case_courrante_ligne = plateau->nord;
   int nombre_espace = 1;
   // parcour du plateau de jeu
+
+    res_affichage();
   while (case_courrante_ligne != NULL) {
-      
+    printf("  ");
     while (case_courrante_colonne != NULL) {
       //affichage de la couleur de la case
-      printf("[%c] ", couleurToChar(case_courrante_colonne));
+      if (case_courrante_colonne->valeur == 1) {
+        printf("[");
+        couleur("31");
+        printf("%c", couleurToChar(case_courrante_colonne));
+        couleur("0");
+        printf("] ");
+      } else if (case_courrante_colonne->valeur == 2) {
+        printf("[");
+        couleur("0");
+        printf("%c", couleurToChar(case_courrante_colonne));
+        couleur("0");
+        printf("] ");
+      } else {
+        printf("[ ] ");
+      }
+
       case_courrante_colonne = case_courrante_colonne->lien[2];
     }
     // fin de ligne
@@ -187,7 +205,7 @@ void affichage_plateau(Plateau plateau) {
     int i;
     for(i=0; i<(nombre_espace*2); i++)
       printf(" ");
-    
+
     case_courrante_ligne = case_courrante_ligne->lien[3];
     case_courrante_colonne = case_courrante_ligne;
     
